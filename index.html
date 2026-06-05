@@ -5,222 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prisoppdatering — Novooi</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: rgba(0,0,0,0.1);
-    --border-md: rgba(0,0,0,0.18);
-    --text: #1a1917;
-    --text2: #6b6a65;
-    --text3: #9b9a95;
-    --accent: #1a1917;
-    --green: #1D9E75;
-    --green-bg: #EAF3DE;
-    --green-text: #2d6e1a;
-    --amber: #BA7517;
-    --amber-bg: #FAEEDA;
-    --red: #A32D2D;
-    --red-bg: #FCEBEB;
-    --blue-bg: #E6F1FB;
-    --blue-text: #185FA5;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  /* Layout */
-  .topbar {
-    background: var(--surface);
-    border-bottom: 0.5px solid var(--border);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    height: 56px;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .topbar-logo { font-weight: 600; font-size: 16px; letter-spacing: -0.3px; }
-  .topbar-sep { width: 1px; height: 18px; background: var(--border); }
-  .topbar-title { font-size: 14px; color: var(--text2); }
-
-  .main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-
-  /* Step indicator */
-  .steps { display: flex; gap: 0; margin-bottom: 2.5rem; background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .step-item { flex: 1; padding: 12px 10px; text-align: center; font-size: 12px; color: var(--text3); background: transparent; cursor: pointer; border-right: 0.5px solid var(--border); transition: background 0.15s, color 0.15s; user-select: none; }
-  .step-item:last-child { border-right: none; }
-  .step-item .sn { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 3px; }
-  .step-item.active { background: var(--surface2); color: var(--text); font-weight: 500; }
-  .step-item.done { color: var(--green); }
-  .step-item.done .sn { color: var(--green); }
-
-  /* Cards */
-  .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
-  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
-
-  /* Form elements */
-  .field { margin-bottom: 1.1rem; }
-  .field label { display: block; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; }
-  .field input[type="text"],
-  .field input[type="password"],
-  .field textarea,
-  .field select {
-    width: 100%;
-    padding: 9px 12px;
-    border: 0.5px solid var(--border-md);
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    background: var(--surface);
-    color: var(--text);
-    font-family: inherit;
-    transition: border-color 0.15s;
-    outline: none;
-  }
-  .field input:focus,
-  .field textarea:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
-  .field textarea { resize: vertical; }
-  .field .hint { font-size: 12px; color: var(--text3); margin-top: 5px; }
-
-  /* Buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 9px 18px; border-radius: var(--radius-sm);
-    font-size: 14px; font-weight: 500; cursor: pointer;
-    border: 0.5px solid var(--border-md);
-    background: var(--surface); color: var(--text);
-    transition: background 0.12s; text-decoration: none;
-  }
-  .btn:hover { background: var(--surface2); }
-  .btn:active { transform: scale(0.98); }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
-  .btn.primary { background: var(--text); color: #fff; border-color: var(--text); }
-  .btn.primary:hover { background: #333; }
-
-  /* Password gate */
-  #gateOverlay {
-    position: fixed; inset: 0; background: var(--bg);
-    display: flex; align-items: center; justify-content: center; z-index: 9999;
-  }
-  .gate-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 2.5rem 2rem; width: 100%; max-width: 380px; text-align: center; }
-  .gate-card h1 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-  .gate-card p { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
-  #gateError { color: var(--red); font-size: 13px; margin-top: 10px; min-height: 18px; }
-
-  /* Drop zone */
-  .drop-zone {
-    border: 1.5px dashed var(--border-md); border-radius: var(--radius);
-    padding: 2.5rem 1rem; text-align: center; cursor: pointer;
-    color: var(--text2); font-size: 14px;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .drop-zone:hover, .drop-zone.over { border-color: var(--text); background: var(--surface2); }
-  .drop-zone svg { margin-bottom: 10px; opacity: 0.5; }
-  .drop-zone .sub { font-size: 12px; color: var(--text3); margin-top: 5px; }
-
-  /* File badge */
-  .file-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--surface2); border: 0.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: 6px 12px;
-    font-size: 13px; margin-top: 10px;
-  }
-  .file-badge .rm { cursor: pointer; color: var(--text3); margin-left: 4px; font-size: 16px; line-height: 1; }
-  .file-badge .rm:hover { color: var(--text); }
-
-  /* Status boxes */
-  .status { border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; display: flex; align-items: flex-start; gap: 10px; margin-bottom: 1rem; }
-  .status.info { background: var(--blue-bg); color: var(--blue-text); }
-  .status.success { background: var(--green-bg); color: var(--green-text); }
-  .status.error { background: var(--red-bg); color: var(--red); }
-  .status.loading { background: var(--surface2); color: var(--text2); }
-
-  /* Stats row */
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.2rem; }
-  .stat { background: var(--surface2); border-radius: var(--radius-sm); padding: 14px 12px; text-align: center; }
-  .stat .val { font-size: 24px; font-weight: 600; }
-  .stat .lbl { font-size: 11px; color: var(--text2); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.4px; }
-
-  /* Filter bar */
-  .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-  .fbtn {
-    padding: 4px 12px; font-size: 12px; border-radius: 100px;
-    border: 0.5px solid var(--border); background: var(--surface2);
-    cursor: pointer; color: var(--text2); transition: background 0.12s;
-  }
-  .fbtn.active { background: var(--text); color: #fff; border-color: var(--text); }
-
-  /* Table */
-  .tbl-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 8px 10px; border-bottom: 0.5px solid var(--border); color: var(--text2); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
-  td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--surface2); }
-
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 100px; font-weight: 500; }
-  .badge.match { background: var(--green-bg); color: var(--green-text); }
-  .badge.new { background: var(--amber-bg); color: var(--amber); }
-  .badge.skip { background: var(--surface2); color: var(--text2); }
-
-  .pup { color: var(--red); font-size: 11px; }
-  .pdown { color: var(--green); font-size: 11px; }
-
-  /* Log */
-  .log {
-    background: #1a1917; color: #c8c5be;
-    border-radius: var(--radius-sm); padding: 12px 14px;
-    font-size: 12px; font-family: 'Courier New', monospace;
-    max-height: 180px; overflow-y: auto; line-height: 1.7;
-  }
-  .log .ok { color: #6bcba0; }
-  .log .warn { color: #f0b86e; }
-  .log .err { color: #f08080; }
-
-  /* CSV preview */
-  .csv-pre {
-    background: var(--surface2); border-radius: var(--radius-sm);
-    padding: 10px 14px; font-size: 12px; font-family: 'Courier New', monospace;
-    max-height: 120px; overflow-y: auto; line-height: 1.8;
-    border: 0.5px solid var(--border); color: var(--text2);
-  }
-
-  /* Nav row */
-  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
-
-  /* Spinner */
-  .spin { display: inline-block; width: 15px; height: 15px; border: 2px solid rgba(0,0,0,0.15); border-top-color: var(--text); border-radius: 50%; animation: rot 0.6s linear infinite; }
-  @keyframes rot { to { transform: rotate(360deg); } }
-
-  /* Panel visibility */
-  .panel { display: none; }
-  .panel.active { display: block; }
-
-  /* Checkbox */
-  input[type="checkbox"] { accent-color: var(--text); width: 15px; height: 15px; cursor: pointer; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--surface:#ffffff;--surface2:#f0efe9;
+  --border:rgba(0,0,0,0.1);--border-md:rgba(0,0,0,0.18);
+  --text:#1a1917;--text2:#6b6a65;--text3:#9b9a95;
+  --green:#1D9E75;--green-bg:#EAF3DE;--green-text:#2d6e1a;
+  --amber:#BA7517;--amber-bg:#FAEEDA;
+  --red:#A32D2D;--red-bg:#FCEBEB;
+  --blue-bg:#E6F1FB;--blue-text:#185FA5;
+  --radius:10px;--radius-sm:6px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
+.topbar{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;height:56px;gap:12px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-weight:600;font-size:16px;letter-spacing:-0.3px}
+.topbar-sep{width:1px;height:18px;background:var(--border)}
+.topbar-title{font-size:14px;color:var(--text2)}
+.main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.steps{display:flex;margin-bottom:2.5rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.step-item{flex:1;padding:12px 10px;text-align:center;font-size:12px;color:var(--text3);cursor:pointer;border-right:0.5px solid var(--border);transition:background 0.15s;user-select:none}
+.step-item:last-child{border-right:none}
+.step-item .sn{display:block;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px}
+.step-item.active{background:var(--surface2);color:var(--text);font-weight:500}
+.step-item.done{color:var(--green)}
+.step-item.done .sn{color:var(--green)}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem}
+.card-title{font-size:15px;font-weight:600;margin-bottom:16px}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px}
+.field input[type="text"],.field input[type="password"],.field textarea{width:100%;padding:9px 12px;border:0.5px solid var(--border-md);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text);font-family:inherit;outline:none;transition:border-color 0.15s}
+.field input:focus,.field textarea:focus{border-color:var(--text);box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
+.field textarea{resize:vertical}
+.field .hint{font-size:12px;color:var(--text3);margin-top:5px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;border:0.5px solid var(--border-md);background:var(--surface);color:var(--text);transition:background 0.12s}
+.btn:hover{background:var(--surface2)}
+.btn:active{transform:scale(0.98)}
+.btn:disabled{opacity:0.4;cursor:not-allowed;pointer-events:none}
+.btn.primary{background:var(--text);color:#fff;border-color:var(--text)}
+.btn.primary:hover{background:#333}
+#gateOverlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+.gate-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:2.5rem 2rem;width:100%;max-width:380px;text-align:center}
+.gate-card h1{font-size:18px;font-weight:600;margin-bottom:6px}
+.gate-card p{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
+#gateError{color:var(--red);font-size:13px;margin-top:10px;min-height:18px}
+.drop-zone{border:1.5px dashed var(--border-md);border-radius:var(--radius);padding:2.5rem 1rem;text-align:center;cursor:pointer;color:var(--text2);font-size:14px;transition:border-color 0.15s,background 0.15s}
+.drop-zone:hover,.drop-zone.over{border-color:var(--text);background:var(--surface2)}
+.drop-zone .sub{font-size:12px;color:var(--text3);margin-top:5px}
+.file-badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 12px;font-size:13px;margin-top:10px}
+.file-badge .rm{cursor:pointer;color:var(--text3);margin-left:4px;font-size:18px;line-height:1}
+.file-badge .rm:hover{color:var(--text)}
+.status{border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1rem}
+.status.info{background:var(--blue-bg);color:var(--blue-text)}
+.status.success{background:var(--green-bg);color:var(--green-text)}
+.status.error{background:var(--red-bg);color:var(--red)}
+.status.loading{background:var(--surface2);color:var(--text2)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.2rem}
+.stat{background:var(--surface2);border-radius:var(--radius-sm);padding:14px 12px;text-align:center}
+.stat .val{font-size:24px;font-weight:600}
+.stat .lbl{font-size:11px;color:var(--text2);margin-top:3px;text-transform:uppercase;letter-spacing:0.4px}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.fbtn{padding:4px 12px;font-size:12px;border-radius:100px;border:0.5px solid var(--border);background:var(--surface2);cursor:pointer;color:var(--text2);transition:background 0.12s}
+.fbtn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--border);color:var(--text2);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:0.4px}
+td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;font-weight:500}
+.badge.match{background:var(--green-bg);color:var(--green-text)}
+.badge.new{background:var(--amber-bg);color:var(--amber)}
+.badge.skip{background:var(--surface2);color:var(--text2)}
+.pup{color:var(--red);font-size:11px}
+.pdown{color:var(--green);font-size:11px}
+.log{background:#1a1917;color:#c8c5be;border-radius:var(--radius-sm);padding:12px 14px;font-size:12px;font-family:'Courier New',monospace;max-height:180px;overflow-y:auto;line-height:1.7}
+.log .ok{color:#6bcba0}
+.log .warn{color:#f0b86e}
+.log .err{color:#f08080}
+.csv-pre{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;font-family:'Courier New',monospace;max-height:120px;overflow-y:auto;line-height:1.8;border:0.5px solid var(--border);color:var(--text2)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(0,0,0,0.15);border-top-color:var(--text);border-radius:50%;animation:rot 0.6s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.panel{display:none}
+.panel.active{display:block}
+input[type="checkbox"]{accent-color:var(--text);width:15px;height:15px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<!-- Password gate -->
 <div id="gateOverlay">
   <div class="gate-card">
     <h1>Novooi</h1>
     <p>Prisoppdateringsagent — intern tilgang</p>
     <div class="field">
-      <input type="password" id="gatePwd" placeholder="Passord" onkeydown="if(event.key==='Enter')checkGate()">
+      <input type="password" id="gatePwd" placeholder="Passord">
     </div>
     <button class="btn primary" style="width:100%" onclick="checkGate()">Logg inn</button>
     <div id="gateError"></div>
@@ -234,48 +112,44 @@
 </div>
 
 <div class="main">
-  <!-- Step bar -->
-  <div class="steps" id="stepBar">
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div class="card-title" style="margin-bottom:12px">Worker-konfigurasjon</div>
+    <div class="field" style="margin-bottom:0">
+      <label>Cloudflare Worker URL</label>
+      <input type="text" id="workerUrl" placeholder="https://prisagent.brukernavn.workers.dev">
+      <div class="hint">Lim inn URL-en til din deployerte Cloudflare Worker. Lagres i nettleseren.</div>
+    </div>
+  </div>
+
+  <div class="steps">
     <div class="step-item active" onclick="tryGoStep(1)"><span class="sn">01</span>WooCommerce</div>
     <div class="step-item" onclick="tryGoStep(2)"><span class="sn">02</span>Prisliste</div>
     <div class="step-item" onclick="tryGoStep(3)"><span class="sn">03</span>Analyser</div>
     <div class="step-item" onclick="tryGoStep(4)"><span class="sn">04</span>Eksport</div>
   </div>
 
-  <!-- STEP 1 -->
   <div class="panel active" id="panel1">
     <div class="card">
-      <div class="card-title">WooCommerce API-tilkobling</div>
-      <div class="field">
-        <label>Butikk-URL</label>
-        <input type="text" id="wc_url" placeholder="https://novooi.no" value="https://novooi.no">
+      <div class="card-title">WooCommerce-tilkobling</div>
+      <div class="status info" style="margin-bottom:1rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>WooCommerce API-nøklene settes som miljøvariabler i Cloudflare Worker — ikke i nettleseren. Se oppsettguiden i README.</span>
       </div>
-      <div class="field">
-        <label>Consumer Key</label>
-        <input type="text" id="wc_key" placeholder="ck_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-      </div>
-      <div class="field">
-        <label>Consumer Secret</label>
-        <input type="password" id="wc_secret" placeholder="cs_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-        <div class="hint">Lag nøkler under WooCommerce → Innstillinger → Avansert → REST API (kun lese-tilgang)</div>
-      </div>
+      <p style="font-size:13px;color:var(--text2)">Klikk nedenfor for å teste tilkoblingen og laste inn alle produkter og varianter som har SKU.</p>
     </div>
     <div id="wc_status"></div>
     <div class="nav">
       <div></div>
-      <button class="btn primary" onclick="connectWC()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Koble til &amp; hent produkter
-      </button>
+      <button class="btn primary" onclick="connectWC()">Hent produkter fra WooCommerce →</button>
     </div>
   </div>
 
-  <!-- STEP 2 -->
   <div class="panel" id="panel2">
     <div class="card">
       <div class="card-title">Last opp leverandørens prisliste</div>
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:10px;opacity:0.4"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         <div>Slipp fil her, eller klikk for å bla</div>
         <div class="sub">PDF · XLSX · XLS · CSV · PNG · JPG</div>
       </div>
@@ -284,28 +158,20 @@
     </div>
     <div class="card">
       <div class="card-title">Instruksjoner til AI</div>
-      <div class="field">
-        <label>Spesifikke instruksjoner (valgfritt)</label>
+      <div class="field" style="margin-bottom:0">
+        <label>Tilleggsinstruksjoner (valgfritt)</label>
         <textarea id="aiInst" rows="3" placeholder="F.eks: Priser er ekskl. mva. Ignorer produkter merket utgått. Leverandøren bruker egne artikkelnummer — match mot produktnavn."></textarea>
       </div>
     </div>
-    <div id="upload_status"></div>
     <div class="nav">
       <button class="btn" onclick="tryGoStep(1)">← Tilbake</button>
-      <button class="btn primary" id="analyzeBtn" disabled onclick="runAnalysis()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-        Analyser med AI
-      </button>
+      <button class="btn primary" id="analyzeBtn" disabled onclick="runAnalysis()">Analyser med AI →</button>
     </div>
   </div>
 
-  <!-- STEP 3 -->
   <div class="panel" id="panel3">
     <div id="analysisProgress" style="display:none">
-      <div class="status loading">
-        <span class="spin"></span>
-        <span id="progressMsg">Analyserer...</span>
-      </div>
+      <div class="status loading"><span class="spin"></span><span id="progressMsg" style="margin-left:4px">Analyserer...</span></div>
       <div class="log" id="logBox"></div>
     </div>
     <div id="reviewArea" style="display:none">
@@ -336,14 +202,10 @@
     </div>
     <div class="nav" style="margin-top:1.5rem">
       <button class="btn" onclick="tryGoStep(2)">← Tilbake</button>
-      <button class="btn primary" id="exportBtn" disabled onclick="prepExport()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        Generer CSV
-      </button>
+      <button class="btn primary" id="exportBtn" disabled onclick="prepExport()">Generer CSV →</button>
     </div>
   </div>
 
-  <!-- STEP 4 -->
   <div class="panel" id="panel4">
     <div class="card">
       <div class="card-title">CSV klar for WooCommerce</div>
@@ -356,119 +218,132 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><polyline points="20 6 9 17 4 12"/></svg>
         <div>Last opp CSV under <strong>WooCommerce → Produkter → Importer</strong>. Husk å huke av <em>«Oppdater eksisterende produkter»</em>.</div>
       </div>
-      <div class="field">
+      <div class="field" style="margin-bottom:0">
         <label>Forhåndsvisning CSV</label>
         <div class="csv-pre" id="csvPreview"></div>
       </div>
     </div>
     <div class="nav">
       <button class="btn" onclick="tryGoStep(3)">← Tilbake</button>
-      <button class="btn primary" onclick="downloadCSV()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Last ned prisoppdatering.csv
-      </button>
+      <button class="btn primary" onclick="downloadCSV()">↓ Last ned prisoppdatering.csv</button>
     </div>
   </div>
+
 </div>
 
 <script>
-/* ── Password gate ── */
-const PASS = 'Novooi26';
-function checkGate() {
-  if (document.getElementById('gatePwd').value === PASS) {
+/* ─── Auth ─── */
+const PASSWORD = 'Novooi26';
+let AUTH_HASH = '';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkGate() {
+  const pwd = document.getElementById('gatePwd').value;
+  const hash = await sha256(pwd);
+  const expected = await sha256(PASSWORD);
+  if (hash === expected) {
+    AUTH_HASH = hash;
+    sessionStorage.setItem('nv_auth', hash);
     document.getElementById('gateOverlay').style.display = 'none';
-    sessionStorage.setItem('auth','1');
   } else {
     document.getElementById('gateError').textContent = 'Feil passord.';
   }
 }
-if (sessionStorage.getItem('auth') === '1') document.getElementById('gateOverlay').style.display = 'none';
 
-/* ── State ── */
+document.getElementById('gatePwd').addEventListener('keydown', e => { if(e.key==='Enter') checkGate(); });
+
+(async () => {
+  const stored = sessionStorage.getItem('nv_auth');
+  if (stored) { AUTH_HASH = stored; document.getElementById('gateOverlay').style.display = 'none'; }
+  const savedUrl = localStorage.getItem('nv_worker_url');
+  if (savedUrl) document.getElementById('workerUrl').value = savedUrl;
+})();
+
+document.getElementById('workerUrl').addEventListener('change', () => {
+  localStorage.setItem('nv_worker_url', document.getElementById('workerUrl').value.trim());
+});
+
+/* ─── State & Steps ─── */
 const S = { step:1, products:[], file:null, matches:[], csv:'' };
 
-/* ── Steps ── */
-function tryGoStep(n) { if (n <= S.step) setStep(n); }
+function tryGoStep(n) { if(n <= S.step) setStep(n); }
 function setStep(n) {
   S.step = n;
   document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===n-1));
   document.querySelectorAll('.step-item').forEach((s,i) => {
     s.classList.remove('active','done');
-    if (i < n-1) s.classList.add('done');
-    if (i === n-1) s.classList.add('active');
+    if(i < n-1) s.classList.add('done');
+    if(i === n-1) s.classList.add('active');
   });
 }
 
-/* ── Status helper ── */
-function setStatus(id, type, html) {
-  const icons = { success:'<polyline points="20 6 9 17 4 12"/>', error:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>', loading:'', info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>' };
-  const icon = type === 'loading' ? '<span class="spin"></span>' : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">${icons[type]}</svg>`;
-  document.getElementById(id).innerHTML = `<div class="status ${type}">${icon}<span>${html}</span></div>`;
+function getWorkerUrl() {
+  const u = document.getElementById('workerUrl').value.trim().replace(/\/$/,'');
+  if(!u) throw new Error('Legg inn Cloudflare Worker URL øverst på siden.');
+  return u;
 }
 
-/* ── WooCommerce ── */
-async function connectWC() {
-  const url = document.getElementById('wc_url').value.trim().replace(/\/$/,'');
-  const key = document.getElementById('wc_key').value.trim();
-  const secret = document.getElementById('wc_secret').value.trim();
-  if (!url || !key || !secret) { setStatus('wc_status','error','Fyll inn alle feltene.'); return; }
-  setStatus('wc_status','loading','Kobler til WooCommerce...');
+function setStatus(id, type, html) {
+  document.getElementById(id).innerHTML = `<div class="status ${type}"><span>${html}</span></div>`;
+}
 
+/* ─── WooCommerce ─── */
+async function connectWC() {
   try {
-    S.wcUrl = url;
-    S.wcCreds = btoa(`${key}:${secret}`);
+    const base = getWorkerUrl();
+    setStatus('wc_status','loading','<span class="spin" style="display:inline-block;vertical-align:middle;margin-right:8px"></span>Henter produkter...');
     let all = [], page = 1;
 
-    while (true) {
-      const r = await fetch(`${url}/wp-json/wc/v3/products?per_page=100&page=${page}&status=publish`, {
-        headers: { 'Authorization': `Basic ${S.wcCreds}` }
+    while(true) {
+      const r = await fetch(`${base}/wc/products?per_page=100&page=${page}&status=publish`, {
+        headers: { 'X-Auth-Hash': AUTH_HASH }
       });
-      if (!r.ok) throw new Error(`HTTP ${r.status} — sjekk URL og API-nøkler`);
+      if(!r.ok) throw new Error(`HTTP ${r.status} — sjekk Worker-miljøvariabler og API-nøkler`);
       const products = await r.json();
-      if (!products.length) break;
+      if(!products.length) break;
 
-      for (const p of products) {
-        if (p.type === 'variable') {
+      for(const p of products) {
+        if(p.type === 'variable') {
           try {
-            const vr = await fetch(`${url}/wp-json/wc/v3/products/${p.id}/variations?per_page=100`, {
-              headers: { 'Authorization': `Basic ${S.wcCreds}` }
-            });
-            if (vr.ok) {
+            const vr = await fetch(`${base}/wc/products/${p.id}/variations?per_page=100`, { headers:{'X-Auth-Hash':AUTH_HASH} });
+            if(vr.ok) {
               const vars = await vr.json();
-              for (const v of vars) {
-                if (v.sku) all.push({ name: p.name + (v.attributes?.length ? ' — ' + v.attributes.map(a=>a.option).join(' / ') : ''), sku: v.sku, price: v.regular_price || v.price || '' });
+              for(const v of vars) {
+                if(v.sku) all.push({ name: p.name + (v.attributes?.length ? ' — ' + v.attributes.map(a=>a.option).join(' / ') : ''), sku: v.sku, price: v.regular_price||v.price||'' });
               }
             }
-          } catch(e) { /* skip failed variation fetch */ }
-        } else if (p.sku) {
-          all.push({ name: p.name, sku: p.sku, price: p.regular_price || p.price || '' });
+          } catch(e) { /* skip */ }
+        } else if(p.sku) {
+          all.push({ name: p.name, sku: p.sku, price: p.regular_price||p.price||'' });
         }
       }
       page++;
-      if (products.length < 100) break;
+      if(products.length < 100) break;
     }
 
     S.products = all;
-    setStatus('wc_status','success',`Hentet <strong>${all.length} produkter/varianter</strong> med SKU.`);
+    setStatus('wc_status','success',`✓ Hentet <strong>${all.length} produkter/varianter</strong> med SKU.`);
     setTimeout(() => setStep(2), 700);
   } catch(e) {
     setStatus('wc_status','error', e.message);
   }
 }
 
-/* ── File upload ── */
+/* ─── File ─── */
 const dz = document.getElementById('dropZone');
 dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
 
 function handleFile(f) {
   S.file = f;
-  const ext = f.name.split('.').pop().toLowerCase();
   document.getElementById('fileBadge').innerHTML = `<div class="file-badge"><span>📄</span><span>${f.name}</span><span style="color:var(--text3);font-size:11px;margin-left:4px">${(f.size/1024).toFixed(0)} KB</span><span class="rm" onclick="clearFile()">×</span></div>`;
   document.getElementById('analyzeBtn').disabled = false;
 }
-
 function clearFile() {
   S.file = null;
   document.getElementById('fileBadge').innerHTML = '';
@@ -476,9 +351,9 @@ function clearFile() {
   document.getElementById('analyzeBtn').disabled = true;
 }
 
-/* ── Analysis ── */
+/* ─── Analysis ─── */
 async function runAnalysis() {
-  if (!S.file) return;
+  if(!S.file) return;
   setStep(3);
   document.getElementById('analysisProgress').style.display = 'block';
   document.getElementById('reviewArea').style.display = 'none';
@@ -490,64 +365,55 @@ async function runAnalysis() {
 
   log(`→ Fil: ${S.file.name}`);
   log(`→ ${S.products.length} WooCommerce-produkter lastet`);
-  setMsg('Forbereder fil...');
 
   try {
     const ext = S.file.name.split('.').pop().toLowerCase();
     const instructions = document.getElementById('aiInst').value.trim();
-    const productList = S.products.map(p => `${p.sku}|${p.name}|${p.price}`).join('\n');
+    const productList = S.products.map(p=>`${p.sku}|${p.name}|${p.price}`).join('\n');
+    const toBase64 = f => new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(f); });
+    const prompt = buildPrompt(productList, instructions);
     let messages = [];
 
-    const toBase64 = (f) => new Promise((res,rej) => { const r = new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(f); });
-
-    const prompt = buildPrompt(productList, instructions);
-
-    if (['png','jpg','jpeg'].includes(ext)) {
+    if(['png','jpg','jpeg'].includes(ext)) {
       const b64 = await toBase64(S.file);
-      messages = [{ role:'user', content:[
-        { type:'image', source:{ type:'base64', media_type: S.file.type || 'image/jpeg', data: b64 } },
-        { type:'text', text: prompt }
-      ]}];
-    } else if (ext === 'pdf') {
+      messages = [{ role:'user', content:[{ type:'image', source:{ type:'base64', media_type:S.file.type||'image/jpeg', data:b64 }},{ type:'text', text:prompt }]}];
+    } else if(ext === 'pdf') {
       const b64 = await toBase64(S.file);
-      messages = [{ role:'user', content:[
-        { type:'document', source:{ type:'base64', media_type:'application/pdf', data: b64 } },
-        { type:'text', text: prompt }
-      ]}];
+      messages = [{ role:'user', content:[{ type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 }},{ type:'text', text:prompt }]}];
     } else {
       const text = await S.file.text();
       messages = [{ role:'user', content: prompt + '\n\n<prisliste>\n' + text.slice(0,40000) + '\n</prisliste>' }];
     }
 
-    log('→ Sender til Claude AI...');
+    log('→ Sender til Claude AI via Worker...');
     setMsg('Analyserer med AI...');
 
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const base = getWorkerUrl();
+    const resp = await fetch(`${base}/ai`, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'X-Auth-Hash': AUTH_HASH },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: 'Du er en prismatching-ekspert for en WooCommerce-nettbutikk. Returner KUN gyldig JSON, ingen forklaring, ingen markdown-kodeblokker.',
+        model:'claude-sonnet-4-20250514',
+        max_tokens:4000,
+        system:'Du er en prismatching-ekspert for en WooCommerce-nettbutikk. Returner KUN gyldig JSON, ingen forklaring, ingen markdown-kodeblokker.',
         messages
       })
     });
 
     const data = await resp.json();
-    if (data.error) throw new Error(data.error.message);
+    if(data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
-    let raw = data.content.map(b => b.text||'').join('').replace(/```json|```/g,'').trim();
+    let raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
     const result = JSON.parse(raw);
     S.matches = result.matches || [];
 
-    log(`→ ${S.matches.filter(m=>m.include).length} matcher klar`, 'ok');
+    log(`→ ${S.matches.filter(m=>m.include).length} matcher funnet`, 'ok');
     log(`→ ${S.matches.filter(m=>!m.include).length} uten match`, 'warn');
 
     renderMatches();
     document.getElementById('analysisProgress').style.display = 'none';
     document.getElementById('reviewArea').style.display = 'block';
     document.getElementById('exportBtn').disabled = false;
-
   } catch(e) {
     log(`✗ Feil: ${e.message}`, 'err');
     setMsg('Analyse feilet');
@@ -557,18 +423,18 @@ async function runAnalysis() {
 function buildPrompt(productList, instructions) {
   return `Du er en prisoppdateringsagent for en WooCommerce-nettbutikk.
 
-Her er alle produkter og varianter med SKU fra butikken (format: SKU|Navn|NåværendePris):
+Her er alle produkter og varianter med SKU (format: SKU|Navn|NåværendePris):
 ${productList}
 
-${instructions ? `Instruksjoner fra bruker: ${instructions}\n` : ''}
-Les prislisten og returner et JSON-objekt med denne strukturen:
+${instructions ? `Instruksjoner: ${instructions}\n` : ''}
+Les prislisten og returner et JSON-objekt:
 {
   "matches": [
     {
-      "sku": "EKSAKT-SKU-FRA-WOOCOMMERCE",
-      "name": "Produktnavn fra butikken",
-      "old_price": "nåværende pris (streng)",
-      "new_price": "ny pris fra prisliste (kun tall med punktum som desimalskilletegn, f.eks. 1299.00)",
+      "sku": "EKSAKT-SKU-FRA-LISTEN",
+      "name": "Produktnavn",
+      "old_price": "nåværende pris",
+      "new_price": "ny pris (kun tall, punktum som desimal, f.eks. 1299.00)",
       "match_type": "exact",
       "confidence": 0.95,
       "include": true,
@@ -577,27 +443,22 @@ Les prislisten og returner et JSON-objekt med denne strukturen:
   ]
 }
 
-Regler:
-- Bruk alltid eksakt SKU fra listen over
-- new_price skal kun inneholde tall (f.eks. 1299.00), ingen valutasymboler
-- Sett include: false hvis prisen er uendret
-- Ikke inkluder produkter du ikke finner i prislisten
-- Prøv å matche på produktnavn dersom SKU ikke finnes direkte i prislisten`;
+Regler: Bruk eksakt SKU fra listen. Bare tall i new_price. Sett include:false hvis prisen er uendret. Ikke inkluder produkter du ikke finner i prislisten.`;
 }
 
-/* ── Render ── */
+/* ─── Render table ─── */
 let currentFilter = 'all';
 function setFilter(f, btn) {
   currentFilter = f;
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderRows();
 }
 
 function renderMatches() {
-  const inc = S.matches.filter(m=>m.include && m.sku);
+  const inc = S.matches.filter(m=>m.include&&m.sku);
+  const changed = inc.filter(m=>m.old_price!==m.new_price);
   const skip = S.matches.filter(m=>!m.include);
-  const changed = inc.filter(m => m.old_price && m.new_price && m.old_price !== m.new_price);
   document.getElementById('statMatch').textContent = inc.length;
   document.getElementById('statChanged').textContent = changed.length;
   document.getElementById('statSkip').textContent = skip.length;
@@ -606,36 +467,34 @@ function renderMatches() {
 
 function renderRows() {
   const filtered = S.matches.filter(m => {
-    if (currentFilter==='all') return true;
-    if (currentFilter==='match') return m.include && m.sku;
-    if (currentFilter==='changed') return m.include && m.old_price !== m.new_price;
-    if (currentFilter==='skip') return !m.include;
+    if(currentFilter==='all') return true;
+    if(currentFilter==='match') return m.include&&m.sku;
+    if(currentFilter==='changed') return m.include&&m.old_price!==m.new_price;
+    if(currentFilter==='skip') return !m.include;
     return true;
   });
 
   document.getElementById('matchBody').innerHTML = filtered.map(m => {
     const idx = S.matches.indexOf(m);
-    const op = parseFloat(m.old_price)||0, np = parseFloat(m.new_price)||0;
-    const diff = np - op;
-    const diffHtml = op && np && diff!==0 ? `<span class="${diff>0?'pup':'pdown'}" style="margin-left:4px">${diff>0?'↑':'↓'}${Math.abs(diff).toFixed(0)}</span>` : '';
-    const badge = !m.include ? 'skip' : m.match_type==='exact' ? 'match' : 'new';
+    const op = parseFloat(m.old_price)||0, np = parseFloat(m.new_price)||0, diff = np-op;
+    const diffHtml = op&&np&&diff!==0 ? `<span class="${diff>0?'pup':'pdown'}" style="margin-left:4px">${diff>0?'↑':'↓'}${Math.abs(diff).toFixed(0)}</span>` : '';
+    const badge = !m.include?'skip':m.match_type==='exact'?'match':'new';
     const label = badge==='skip'?'Ikke matchet':badge==='match'?'Match':'Ny pris';
     return `<tr>
       <td><span class="badge ${badge}">${label}</span></td>
       <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(m.name||'').replace(/"/g,'&quot;')}">${m.name||'—'}</td>
       <td style="font-family:'Courier New',monospace;font-size:12px;color:var(--text2)">${m.sku||'—'}</td>
       <td>${m.old_price?`kr ${m.old_price}`:'—'}</td>
-      <td>${m.new_price?`kr ${m.new_price}`:'-'}${diffHtml}</td>
+      <td>${m.new_price?`kr ${m.new_price}`:'—'}${diffHtml}</td>
       <td><input type="checkbox" ${m.include?'checked':''} onchange="S.matches[${idx}].include=this.checked;updateCSV()"></td>
     </tr>`;
   }).join('');
 }
 
-/* ── CSV ── */
+/* ─── CSV ─── */
 function updateCSV() {
   const rows = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
-  const lines = ['SKU,pris', ...rows.map(r=>`${r.sku},${r.new_price}`)];
-  S.csv = lines.join('\n');
+  S.csv = ['SKU,pris', ...rows.map(r=>`${r.sku},${r.new_price}`)].join('\n');
 }
 
 function prepExport() {
@@ -650,7 +509,7 @@ function prepExport() {
 }
 
 function downloadCSV() {
-  if (!S.csv) return;
+  if(!S.csv) return;
   const blob = new Blob([S.csv], { type:'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
