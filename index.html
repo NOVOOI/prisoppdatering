@@ -3,236 +3,479 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prisoppdatering — Novooi</title>
+<title>Novooi — Prisoppdatering</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232c2416'/%3E%3Ctext x='5' y='23' font-family='Georgia,serif' font-size='20' font-weight='300' fill='%23f5f0e8' letter-spacing='-1'%3Ekr%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 :root{
-  --bg:#f5f4f0;--surface:#ffffff;--surface2:#f0efe9;
-  --border:rgba(0,0,0,0.1);--border-md:rgba(0,0,0,0.18);
-  --text:#1a1917;--text2:#6b6a65;--text3:#9b9a95;
-  --green:#1D9E75;--green-bg:#EAF3DE;--green-text:#2d6e1a;
-  --amber:#BA7517;--amber-bg:#FAEEDA;
-  --red:#A32D2D;--red-bg:#FCEBEB;
-  --blue-bg:#E6F1FB;--blue-text:#185FA5;
-  --radius:10px;--radius-sm:6px;
+  --cream:#f5f0e8;
+  --warm:#faf7f2;
+  --sand:#ede5d0;
+  --taupe:#c4b49a;
+  --brown:#8b7355;
+  --accent:#6b4f2a;
+  --dark:#2c2416;
+  --ink:#3d3020;
+  --mid:#6b6050;
+  --light:#a89e8e;
+  --border:#d4c8b0;
+  --border-light:#e8dfc8;
+  --green:#3a6b4f;
+  --green-bg:#eef5f0;
+  --red:#a0392a;
+  --red-bg:#faf0ee;
+  --amber:#8b5e1a;
+  --amber-bg:#fbf4e8;
+  --blue:#2a4f8b;
+  --blue-bg:#eef2fa;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
-.topbar{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;height:56px;gap:12px;position:sticky;top:0;z-index:100}
-.topbar-logo{font-weight:600;font-size:16px;letter-spacing:-0.3px}
-.topbar-sep{width:1px;height:18px;background:var(--border)}
-.topbar-title{font-size:14px;color:var(--text2)}
-.main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
-.steps{display:flex;margin-bottom:2.5rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.step-item{flex:1;padding:12px 10px;text-align:center;font-size:12px;color:var(--text3);cursor:pointer;border-right:0.5px solid var(--border);transition:background 0.15s;user-select:none}
+
+body{background:var(--cream);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;font-size:16px;line-height:1.5}
+
+/* ── Topbar ── */
+.topbar{background:var(--dark);color:var(--cream);padding:0 2.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(255,255,255,0.06)}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-logo{font-family:'Courier Prime',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream)}
+.topbar-sep{width:1px;height:16px;background:rgba(255,255,255,0.15)}
+.topbar-title{font-size:13px;color:var(--taupe);letter-spacing:0.04em}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-tag{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);color:var(--taupe);padding:3px 10px}
+
+/* ── Gate ── */
+#gateOverlay{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:9999}
+.gate-inner{text-align:center;padding:3rem 2rem;width:100%;max-width:360px}
+.gate-logo{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--taupe);margin-bottom:2.5rem}
+.gate-inner h1{font-size:2.2rem;font-weight:300;letter-spacing:0.04em;color:var(--cream);margin-bottom:0.5rem}
+.gate-inner p{font-size:14px;color:var(--taupe);margin-bottom:2.5rem;letter-spacing:0.02em}
+.gate-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:17px;padding:12px 16px;outline:none;text-align:center;letter-spacing:0.08em;margin-bottom:14px}
+.gate-input::placeholder{color:rgba(255,255,255,0.25)}
+.gate-input:focus{border-color:var(--taupe)}
+.gate-btn{width:100%;background:var(--cream);color:var(--dark);border:none;font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:14px;cursor:pointer;transition:opacity 0.15s}
+.gate-btn:hover{opacity:0.85}
+#gateError{font-size:13px;color:#e07060;margin-top:12px;min-height:18px;letter-spacing:0.02em}
+
+/* ── Layout ── */
+.main{max-width:940px;margin:0 auto;padding:3rem 2rem 5rem}
+
+/* ── Section headers ── */
+.section-label{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--brown);margin-bottom:1rem}
+
+/* ── Worker config bar ── */
+.config-bar{background:var(--warm);border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:16px}
+.config-bar label{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown);white-space:nowrap}
+.config-bar input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink);padding:4px 0;outline:none}
+.config-bar input:focus{border-bottom-color:var(--accent)}
+.config-bar input::placeholder{color:var(--light)}
+.config-status{width:8px;height:8px;border-radius:50%;background:var(--taupe);flex-shrink:0;transition:background 0.3s}
+.config-status.ok{background:var(--green)}
+.config-status.err{background:var(--red)}
+
+/* ── Step bar ── */
+.steps{display:flex;border:1px solid var(--border);margin-bottom:2.5rem;background:var(--warm)}
+.step-item{flex:1;padding:14px 12px;text-align:center;cursor:pointer;border-right:1px solid var(--border);transition:background 0.15s;user-select:none}
 .step-item:last-child{border-right:none}
-.step-item .sn{display:block;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px}
-.step-item.active{background:var(--surface2);color:var(--text);font-weight:500}
-.step-item.done{color:var(--green)}
-.step-item.done .sn{color:var(--green)}
-.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem}
-.card-title{font-size:15px;font-weight:600;margin-bottom:16px}
-.field{margin-bottom:1.1rem}
-.field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px}
-.field input[type="text"],.field input[type="password"],.field textarea{width:100%;padding:9px 12px;border:0.5px solid var(--border-md);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text);font-family:inherit;outline:none;transition:border-color 0.15s}
-.field input:focus,.field textarea:focus{border-color:var(--text);box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
-.field textarea{resize:vertical}
-.field .hint{font-size:12px;color:var(--text3);margin-top:5px}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;border:0.5px solid var(--border-md);background:var(--surface);color:var(--text);transition:background 0.12s}
-.btn:hover{background:var(--surface2)}
-.btn:active{transform:scale(0.98)}
-.btn:disabled{opacity:0.4;cursor:not-allowed;pointer-events:none}
-.btn.primary{background:var(--text);color:#fff;border-color:var(--text)}
-.btn.primary:hover{background:#333}
-#gateOverlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
-.gate-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:2.5rem 2rem;width:100%;max-width:380px;text-align:center}
-.gate-card h1{font-size:18px;font-weight:600;margin-bottom:6px}
-.gate-card p{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
-#gateError{color:var(--red);font-size:13px;margin-top:10px;min-height:18px}
-.drop-zone{border:1.5px dashed var(--border-md);border-radius:var(--radius);padding:2.5rem 1rem;text-align:center;cursor:pointer;color:var(--text2);font-size:14px;transition:border-color 0.15s,background 0.15s}
-.drop-zone:hover,.drop-zone.over{border-color:var(--text);background:var(--surface2)}
-.drop-zone .sub{font-size:12px;color:var(--text3);margin-top:5px}
-.file-badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 12px;font-size:13px;margin-top:10px}
-.file-badge .rm{cursor:pointer;color:var(--text3);margin-left:4px;font-size:18px;line-height:1}
-.file-badge .rm:hover{color:var(--text)}
-.status{border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1rem}
-.status.info{background:var(--blue-bg);color:var(--blue-text)}
-.status.success{background:var(--green-bg);color:var(--green-text)}
-.status.error{background:var(--red-bg);color:var(--red)}
-.status.loading{background:var(--surface2);color:var(--text2)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.2rem}
-.stat{background:var(--surface2);border-radius:var(--radius-sm);padding:14px 12px;text-align:center}
-.stat .val{font-size:24px;font-weight:600}
-.stat .lbl{font-size:11px;color:var(--text2);margin-top:3px;text-transform:uppercase;letter-spacing:0.4px}
-.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.fbtn{padding:4px 12px;font-size:12px;border-radius:100px;border:0.5px solid var(--border);background:var(--surface2);cursor:pointer;color:var(--text2);transition:background 0.12s}
-.fbtn.active{background:var(--text);color:#fff;border-color:var(--text)}
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--border);color:var(--text2);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:0.4px}
-td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
+.step-num{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--light);display:block;margin-bottom:4px}
+.step-name{font-size:13px;color:var(--mid);letter-spacing:0.02em}
+.step-item.active{background:var(--sand)}
+.step-item.active .step-name{color:var(--ink);font-weight:500}
+.step-item.active .step-num{color:var(--brown)}
+.step-item.done .step-num{color:var(--green)}
+.step-item.done .step-name{color:var(--green)}
+
+/* ── Cards ── */
+.card{background:var(--warm);border:1px solid var(--border);padding:2rem;margin-bottom:1.25rem}
+.card-head{font-size:1.4rem;font-weight:400;letter-spacing:0.01em;margin-bottom:1.25rem;color:var(--dark)}
+
+/* ── Form ── */
+.field{margin-bottom:1.25rem}
+.field label{display:block;font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown);margin-bottom:8px}
+.field input[type="text"],.field input[type="password"],.field textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ink);padding:8px 0;outline:none;transition:border-color 0.15s}
+.field input:focus,.field textarea:focus{border-bottom-color:var(--accent)}
+.field input::placeholder,.field textarea::placeholder{color:var(--light)}
+.field textarea{resize:vertical;border:1px solid var(--border);padding:10px 12px;margin-top:0}
+.field textarea:focus{border-color:var(--accent)}
+.field .hint{font-family:'Courier Prime',monospace;font-size:10px;color:var(--light);margin-top:6px;letter-spacing:0.04em}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--warm);color:var(--ink);transition:background 0.12s,border-color 0.12s}
+.btn:hover{background:var(--sand);border-color:var(--taupe)}
+.btn:active{transform:scale(0.99)}
+.btn:disabled{opacity:0.35;cursor:not-allowed;pointer-events:none}
+.btn.primary{background:var(--dark);color:var(--cream);border-color:var(--dark)}
+.btn.primary:hover{background:var(--accent);border-color:var(--accent)}
+
+/* ── Status banners ── */
+.banner{padding:12px 16px;font-size:14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.25rem;border-left:2px solid}
+.banner.info{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.banner.success{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.banner.error{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.banner.loading{background:var(--sand);border-color:var(--taupe);color:var(--mid)}
+.banner.warn{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+.banner strong{font-weight:600}
+
+/* ── Drop zone ── */
+.drop-zone{border:1px dashed var(--border);padding:3rem 1.5rem;text-align:center;cursor:pointer;transition:border-color 0.15s,background 0.15s;color:var(--mid)}
+.drop-zone:hover,.drop-zone.over{border-color:var(--brown);background:var(--sand)}
+.drop-zone .dz-icon{font-size:28px;margin-bottom:10px;opacity:0.4}
+.drop-zone .dz-main{font-size:15px;letter-spacing:0.02em;margin-bottom:4px}
+.drop-zone .dz-sub{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--light)}
+.file-pill{display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);padding:6px 14px;font-size:13px;margin-top:12px}
+.file-pill .fp-name{color:var(--ink)}
+.file-pill .fp-size{font-family:'Courier Prime',monospace;font-size:10px;color:var(--light)}
+.file-pill .fp-rm{cursor:pointer;color:var(--light);margin-left:4px;font-size:16px;line-height:1}
+.file-pill .fp-rm:hover{color:var(--red)}
+
+/* ── Stats row ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
+.stat-cell{background:var(--warm);padding:1.25rem 1rem;text-align:center}
+.stat-val{font-size:2rem;font-weight:300;letter-spacing:-0.02em;line-height:1;margin-bottom:4px}
+.stat-lbl{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--light)}
+
+/* ── Filter pills ── */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.fpill{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border:1px solid var(--border);background:var(--warm);cursor:pointer;color:var(--mid);transition:background 0.12s}
+.fpill:hover{background:var(--sand)}
+.fpill.active{background:var(--dark);color:var(--cream);border-color:var(--dark)}
+
+/* ── Match table ── */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead tr{background:var(--dark)}
+th{text-align:left;padding:10px 12px;font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);font-weight:400}
+td{padding:9px 12px;border-bottom:1px solid var(--border-light)}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--surface2)}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;font-weight:500}
-.badge.match{background:var(--green-bg);color:var(--green-text)}
-.badge.new{background:var(--amber-bg);color:var(--amber)}
-.badge.skip{background:var(--surface2);color:var(--text2)}
-.pup{color:var(--red);font-size:11px}
-.pdown{color:var(--green);font-size:11px}
-.log{background:#1a1917;color:#c8c5be;border-radius:var(--radius-sm);padding:12px 14px;font-size:12px;font-family:'Courier New',monospace;max-height:180px;overflow-y:auto;line-height:1.7}
-.log .ok{color:#6bcba0}
-.log .warn{color:#f0b86e}
-.log .err{color:#f08080}
-.csv-pre{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;font-family:'Courier New',monospace;max-height:120px;overflow-y:auto;line-height:1.8;border:0.5px solid var(--border);color:var(--text2)}
-.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
-.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(0,0,0,0.15);border-top-color:var(--text);border-radius:50%;animation:rot 0.6s linear infinite}
+tbody tr:hover td{background:var(--sand)}
+.badge{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border:1px solid}
+.badge.match{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.badge.new{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+.badge.skip{border-color:var(--border);color:var(--light);background:var(--sand)}
+.price-up{color:var(--red);font-size:11px;margin-left:4px}
+.price-down{color:var(--green);font-size:11px;margin-left:4px}
+
+/* ── Log ── */
+.log-box{background:var(--dark);color:#c8c0b0;padding:14px 16px;font-family:'Courier Prime',monospace;font-size:12px;max-height:200px;overflow-y:auto;line-height:1.8;letter-spacing:0.02em}
+.log-box .ok{color:#7dc4a0}
+.log-box .warn{color:#e0b060}
+.log-box .err{color:#e08070}
+
+/* ── CSV preview ── */
+.csv-pre{background:var(--dark);color:#c8c0b0;padding:14px 16px;font-family:'Courier Prime',monospace;font-size:12px;max-height:140px;overflow-y:auto;line-height:1.8;border:1px solid var(--border)}
+
+/* ── Workflow tips ── */
+.tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.tip-card{background:var(--warm);border:1px solid var(--border);padding:1.25rem 1.5rem}
+.tip-num{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px}
+.tip-title{font-size:1.05rem;font-weight:500;color:var(--dark);margin-bottom:6px}
+.tip-body{font-size:13px;color:var(--mid);line-height:1.6}
+
+/* ── Nav ── */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--border-light)}
+
+/* ── Spinner ── */
+.spin{display:inline-block;width:14px;height:14px;border:1.5px solid var(--border);border-top-color:var(--brown);border-radius:50%;animation:rot 0.7s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
+
+/* ── Divider ── */
+.divider{border:none;border-top:1px solid var(--border-light);margin:1.75rem 0}
+
 .panel{display:none}
 .panel.active{display:block}
-input[type="checkbox"]{accent-color:var(--text);width:15px;height:15px;cursor:pointer}
+input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
 </style>
 </head>
 <body>
 
+<!-- Gate -->
 <div id="gateOverlay">
-  <div class="gate-card">
-    <h1>Novooi</h1>
-    <p>Prisoppdateringsagent — intern tilgang</p>
-    <div class="field">
-      <input type="password" id="gatePwd" placeholder="Passord">
-    </div>
-    <button class="btn primary" style="width:100%" onclick="checkGate()">Logg inn</button>
+  <div class="gate-inner">
+    <div class="gate-logo">Novooi — Internt verktøy</div>
+    <h1>Prisoppdatering</h1>
+    <p>Kun for autoriserte teammedlemmer</p>
+    <input class="gate-input" type="password" id="gatePwd" placeholder="Passord">
+    <button class="gate-btn" onclick="checkGate()">Logg inn</button>
     <div id="gateError"></div>
   </div>
 </div>
 
+<!-- Topbar -->
 <div class="topbar">
-  <span class="topbar-logo">Novooi</span>
-  <span class="topbar-sep"></span>
-  <span class="topbar-title">Prisoppdatering</span>
+  <div class="topbar-left">
+    <span class="topbar-logo">Novooi</span>
+    <span class="topbar-sep"></span>
+    <span class="topbar-title">Prisoppdatering</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-tag">Internt verktøy</span>
+    <a href="https://novooi.github.io/NOVOOI-AGENTS/" style="font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe);text-decoration:none;padding:3px 10px;border:1px solid rgba(255,255,255,0.1)">← Agent Hub</a>
+  </div>
 </div>
 
 <div class="main">
 
-  <div class="card" style="margin-bottom:1.5rem">
-    <div class="card-title" style="margin-bottom:12px">Worker-konfigurasjon</div>
-    <div class="field" style="margin-bottom:0">
-      <label>Cloudflare Worker URL</label>
-      <input type="text" id="workerUrl" placeholder="https://prisagent.brukernavn.workers.dev">
-      <div class="hint">Lim inn URL-en til din deployerte Cloudflare Worker. Lagres i nettleseren.</div>
+  <!-- Worker config -->
+  <div class="config-bar">
+    <span class="config-status" id="cfgDot"></span>
+    <label>Worker URL</label>
+    <input type="text" id="workerUrl" placeholder="https://prisoppdatering.brukernavn.workers.dev">
+  </div>
+
+  <!-- Step bar -->
+  <div class="steps">
+    <div class="step-item active" onclick="tryGoStep(1)">
+      <span class="step-num">01</span>
+      <span class="step-name">WooCommerce</span>
+    </div>
+    <div class="step-item" onclick="tryGoStep(2)">
+      <span class="step-num">02</span>
+      <span class="step-name">Prisliste</span>
+    </div>
+    <div class="step-item" onclick="tryGoStep(3)">
+      <span class="step-num">03</span>
+      <span class="step-name">Analyser</span>
+    </div>
+    <div class="step-item" onclick="tryGoStep(4)">
+      <span class="step-num">04</span>
+      <span class="step-name">Eksport</span>
     </div>
   </div>
 
-  <div class="steps">
-    <div class="step-item active" onclick="tryGoStep(1)"><span class="sn">01</span>WooCommerce</div>
-    <div class="step-item" onclick="tryGoStep(2)"><span class="sn">02</span>Prisliste</div>
-    <div class="step-item" onclick="tryGoStep(3)"><span class="sn">03</span>Analyser</div>
-    <div class="step-item" onclick="tryGoStep(4)"><span class="sn">04</span>Eksport</div>
-  </div>
-
+  <!-- ── STEP 1 ── -->
   <div class="panel active" id="panel1">
     <div class="card">
-      <div class="card-title">WooCommerce-tilkobling</div>
-      <div class="status info" style="margin-bottom:1rem">
+      <div class="section-label">Tilkobling</div>
+      <div class="card-head">WooCommerce produktliste</div>
+      <div class="banner info">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>WooCommerce API-nøklene settes som miljøvariabler i Cloudflare Worker — ikke i nettleseren. Se oppsettguiden i README.</span>
+        <span>API-nøkler er lagret som krypterte hemmeligheter i Cloudflare Worker — aldri i nettleseren.</span>
       </div>
-      <p style="font-size:13px;color:var(--text2)">Klikk nedenfor for å teste tilkoblingen og laste inn alle produkter og varianter som har SKU.</p>
+      <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:1.5rem">Agenten henter alle produkter og varianter med SKU fra WooCommerce. Disse brukes til å matche mot leverandørens prisliste.</p>
+      <div id="wc_status"></div>
     </div>
-    <div id="wc_status"></div>
-    <div class="nav">
+
+    <!-- Workflow tips step 1 -->
+    <div class="card">
+      <div class="section-label">Workflow-guide</div>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-num">Tips 01</div>
+          <div class="tip-title">Hvilke produkter hentes?</div>
+          <div class="tip-body">Alle publiserte produkter og varianter som har et SKU-nummer. Variable produkter hentes med alle varianter separat.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">Tips 02</div>
+          <div class="tip-title">Krav til WooCommerce</div>
+          <div class="tip-body">Nøklene trenger kun <strong>lese</strong>-tilgang. Lag under WooCommerce → Innstillinger → Avansert → REST API.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">Tips 03</div>
+          <div class="tip-title">Når bør du oppdatere?</div>
+          <div class="tip-body">Kjør denne agenten hver gang du mottar ny prisliste fra en leverandør. Typisk ved sesongskifte eller etter forhandlinger.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">Tips 04</div>
+          <div class="tip-title">Feilsøking 403</div>
+          <div class="tip-body">403-feil betyr feil passord-hash. Åpne F12-konsollen og kjør: <code style="font-family:'Courier Prime',monospace;font-size:11px;background:var(--sand);padding:1px 4px">sha256('Novooi26')</code> for å verifisere.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
       <div></div>
       <button class="btn primary" onclick="connectWC()">Hent produkter fra WooCommerce →</button>
     </div>
   </div>
 
+  <!-- ── STEP 2 ── -->
   <div class="panel" id="panel2">
     <div class="card">
-      <div class="card-title">Last opp leverandørens prisliste</div>
+      <div class="section-label">Fil</div>
+      <div class="card-head">Last opp prisliste</div>
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:10px;opacity:0.4"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <div>Slipp fil her, eller klikk for å bla</div>
-        <div class="sub">PDF · XLSX · XLS · CSV · PNG · JPG</div>
+        <div class="dz-icon">↑</div>
+        <div class="dz-main">Slipp fil her, eller klikk for å bla</div>
+        <div class="dz-sub" style="margin-top:6px">PDF · XLSX · XLS · CSV · PNG · JPG</div>
       </div>
       <input type="file" id="fileInput" style="display:none" accept=".pdf,.xlsx,.xls,.csv,.png,.jpg,.jpeg" onchange="handleFile(this.files[0])">
       <div id="fileBadge"></div>
     </div>
+
     <div class="card">
-      <div class="card-title">Instruksjoner til AI</div>
-      <div class="field" style="margin-bottom:0">
-        <label>Tilleggsinstruksjoner (valgfritt)</label>
-        <textarea id="aiInst" rows="3" placeholder="F.eks: Priser er ekskl. mva. Ignorer produkter merket utgått. Leverandøren bruker egne artikkelnummer — match mot produktnavn."></textarea>
+      <div class="section-label">AI-instruksjoner</div>
+      <div class="card-head">Tilleggsinformasjon til Claude</div>
+      <div class="field">
+        <label>Instruksjoner (valgfritt)</label>
+        <textarea id="aiInst" rows="4" placeholder="Eks: Priser er ekskl. mva — gang med 1.25 for å få inkl. mva.&#10;Eks: Ignorer produkter merket «utgått» eller «avviklet».&#10;Eks: Leverandøren bruker egne artikkelnummer — match mot produktnavn og variant."></textarea>
+      </div>
+
+      <!-- Common presets -->
+      <div class="section-label" style="margin-bottom:8px">Hurtigmaler</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Priser er ekskl. mva — gang alle priser med 1.25.')">+ Ekskl. mva</button>
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Ignorer produkter merket utgått, avviklet eller discontinued.')">+ Ignorer utgåtte</button>
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Match på produktnavn og variantbeskrivelse der SKU ikke finnes direkte.')">+ Navnematching</button>
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Priser er oppgitt i EUR — konverter til NOK med kurs 11.80.')">+ EUR → NOK</button>
       </div>
     </div>
-    <div class="nav">
+
+    <div class="card">
+      <div class="section-label">Produktoversikt</div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1rem">
+        <span style="font-size:1.1rem;color:var(--ink)">Laster produkter fra WooCommerce</span>
+        <span id="productCountBadge" style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--brown)"></span>
+      </div>
+      <div id="productPreview" style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--mid);line-height:1.8"></div>
+    </div>
+
+    <div class="nav-row">
       <button class="btn" onclick="tryGoStep(1)">← Tilbake</button>
       <button class="btn primary" id="analyzeBtn" disabled onclick="runAnalysis()">Analyser med AI →</button>
     </div>
   </div>
 
+  <!-- ── STEP 3 ── -->
   <div class="panel" id="panel3">
     <div id="analysisProgress" style="display:none">
-      <div class="status loading"><span class="spin"></span><span id="progressMsg" style="margin-left:4px">Analyserer...</span></div>
-      <div class="log" id="logBox"></div>
+      <div class="card">
+        <div class="section-label">Status</div>
+        <div class="banner loading">
+          <span class="spin"></span>
+          <span id="progressMsg" style="margin-left:4px">Analyserer...</span>
+        </div>
+        <div class="log-box" id="logBox"></div>
+      </div>
     </div>
+
     <div id="reviewArea" style="display:none">
-      <div class="stats">
-        <div class="stat"><div class="val" id="statMatch">0</div><div class="lbl">Matcher</div></div>
-        <div class="stat"><div class="val" id="statChanged">0</div><div class="lbl">Endret pris</div></div>
-        <div class="stat"><div class="val" id="statSkip">0</div><div class="lbl">Ikke matchet</div></div>
+      <div class="card">
+        <div class="section-label">Resultat</div>
+        <div class="card-head">Prismatching</div>
+        <div class="stats-row">
+          <div class="stat-cell">
+            <div class="stat-val" id="statMatch">0</div>
+            <div class="stat-lbl">Matchet</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-val" id="statChanged">0</div>
+            <div class="stat-lbl">Endret pris</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-val" id="statSkip">0</div>
+            <div class="stat-lbl">Ikke matchet</div>
+          </div>
+        </div>
+
+        <div id="aiSummary" style="margin-bottom:1.25rem;display:none">
+          <div class="banner warn" id="aiSummaryBox"></div>
+        </div>
+
+        <div class="filter-row">
+          <button class="fpill active" onclick="setFilter('all',this)">Alle</button>
+          <button class="fpill" onclick="setFilter('match',this)">Matchet</button>
+          <button class="fpill" onclick="setFilter('changed',this)">Endret</button>
+          <button class="fpill" onclick="setFilter('skip',this)">Ikke matchet</button>
+          <button class="fpill" onclick="setFilter('up',this)">↑ Prisøkning</button>
+          <button class="fpill" onclick="setFilter('down',this)">↓ Prisreduksjon</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:90px">Status</th>
+              <th>Produktnavn</th>
+              <th style="width:140px">SKU</th>
+              <th style="width:110px">Nåv. pris</th>
+              <th style="width:130px">Ny pris</th>
+              <th style="width:55px">Inkl.</th>
+            </tr></thead>
+            <tbody id="matchBody"></tbody>
+          </table>
+        </div>
       </div>
-      <div class="filter-bar">
-        <button class="fbtn active" onclick="setFilter('all',this)">Alle</button>
-        <button class="fbtn" onclick="setFilter('match',this)">Matchet</button>
-        <button class="fbtn" onclick="setFilter('changed',this)">Ny pris</button>
-        <button class="fbtn" onclick="setFilter('skip',this)">Ikke matchet</button>
-      </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th style="width:90px">Status</th>
-            <th>Produktnavn</th>
-            <th style="width:140px">SKU</th>
-            <th style="width:110px">Nåv. pris</th>
-            <th style="width:110px">Ny pris</th>
-            <th style="width:55px">Inkl.</th>
-          </tr></thead>
-          <tbody id="matchBody"></tbody>
-        </table>
+
+      <!-- Summary card -->
+      <div class="card" id="summaryCard" style="display:none">
+        <div class="section-label">Oppsummering</div>
+        <div class="card-head">Prisendringer</div>
+        <div id="summaryContent" style="font-size:15px;color:var(--mid);line-height:1.8"></div>
       </div>
     </div>
-    <div class="nav" style="margin-top:1.5rem">
+
+    <div class="nav-row">
       <button class="btn" onclick="tryGoStep(2)">← Tilbake</button>
       <button class="btn primary" id="exportBtn" disabled onclick="prepExport()">Generer CSV →</button>
     </div>
   </div>
 
+  <!-- ── STEP 4 ── -->
   <div class="panel" id="panel4">
     <div class="card">
-      <div class="card-title">CSV klar for WooCommerce</div>
-      <div class="stats" style="margin-bottom:1.2rem">
-        <div class="stat"><div class="val" id="expCount">0</div><div class="lbl">Rader</div></div>
-        <div class="stat"><div class="val" id="expUp" style="color:var(--red)">0</div><div class="lbl">↑ Prisøkninger</div></div>
-        <div class="stat"><div class="val" id="expDown" style="color:var(--green)">0</div><div class="lbl">↓ Reduksjoner</div></div>
+      <div class="section-label">Eksport</div>
+      <div class="card-head">CSV klar for import</div>
+
+      <div class="stats-row" style="margin-bottom:1.5rem">
+        <div class="stat-cell">
+          <div class="stat-val" id="expCount">0</div>
+          <div class="stat-lbl">Rader totalt</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val" id="expUp" style="color:var(--red)">0</div>
+          <div class="stat-lbl">↑ Prisøkninger</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val" id="expDown" style="color:var(--green)">0</div>
+          <div class="stat-lbl">↓ Reduksjoner</div>
+        </div>
       </div>
-      <div class="status success" style="margin-bottom:1.2rem">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><polyline points="20 6 9 17 4 12"/></svg>
-        <div>Last opp CSV under <strong>WooCommerce → Produkter → Importer</strong>. Husk å huke av <em>«Oppdater eksisterende produkter»</em>.</div>
+
+      <div class="banner success" style="margin-bottom:1.5rem">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>CSV-filen er klar. Last opp under <strong>WooCommerce → Produkter → Importer</strong> og huk av <em>«Oppdater eksisterende produkter»</em>.</span>
       </div>
-      <div class="field" style="margin-bottom:0">
-        <label>Forhåndsvisning CSV</label>
+
+      <div class="field">
+        <label>Forhåndsvisning</label>
         <div class="csv-pre" id="csvPreview"></div>
       </div>
+
+      <hr class="divider">
+
+      <div class="section-label">Import-steg</div>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-num">Steg 01</div>
+          <div class="tip-title">Last ned CSV-filen</div>
+          <div class="tip-body">Klikk «Last ned» nedenfor. Filen inneholder kun SKU og pris, ingen andre felter som kan overskrive eksisterende data.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">Steg 02</div>
+          <div class="tip-title">Åpne WooCommerce-import</div>
+          <div class="tip-body">Gå til <strong>Produkter → Alle produkter → Importer</strong> øverst på siden.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">Steg 03</div>
+          <div class="tip-title">Konfigurer import</div>
+          <div class="tip-body">Velg filen, huk av <strong>«Oppdater eksisterende produkter»</strong>. Sørg for at SKU mappes til SKU og «pris» mappes til «Vanlig pris».</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">Steg 04</div>
+          <div class="tip-title">Verifiser etter import</div>
+          <div class="tip-body">Spot-sjekk 3–5 produkter manuelt i WooCommerce etter import for å bekrefte at prisene er korrekte.</div>
+        </div>
+      </div>
     </div>
-    <div class="nav">
+
+    <div class="nav-row">
       <button class="btn" onclick="tryGoStep(3)">← Tilbake</button>
       <button class="btn primary" onclick="downloadCSV()">↓ Last ned prisoppdatering.csv</button>
     </div>
   </div>
 
-</div>
+</div><!-- /main -->
 
 <script>
-/* ─── Auth ─── */
+/* ── Auth ── */
 const PASSWORD = 'Novooi26';
 let AUTH_HASH = '';
 
@@ -250,7 +493,7 @@ async function checkGate() {
     sessionStorage.setItem('nv_auth', hash);
     document.getElementById('gateOverlay').style.display = 'none';
   } else {
-    document.getElementById('gateError').textContent = 'Feil passord.';
+    document.getElementById('gateError').textContent = 'Feil passord — prøv igjen.';
   }
 }
 
@@ -263,11 +506,12 @@ document.getElementById('gatePwd').addEventListener('keydown', e => { if(e.key==
   if (savedUrl) document.getElementById('workerUrl').value = savedUrl;
 })();
 
-document.getElementById('workerUrl').addEventListener('change', () => {
-  localStorage.setItem('nv_worker_url', document.getElementById('workerUrl').value.trim());
+document.getElementById('workerUrl').addEventListener('input', function() {
+  localStorage.setItem('nv_worker_url', this.value.trim());
+  document.getElementById('cfgDot').className = 'config-status';
 });
 
-/* ─── State & Steps ─── */
+/* ── State ── */
 const S = { step:1, products:[], file:null, matches:[], csv:'' };
 
 function tryGoStep(n) { if(n <= S.step) setStep(n); }
@@ -284,20 +528,22 @@ function setStep(n) {
 function getWorkerUrl() {
   const u = document.getElementById('workerUrl').value.trim().replace(/\/$/,'');
   if(!u) throw new Error('Legg inn Cloudflare Worker URL øverst på siden.');
+  if(!u.startsWith('https://')) throw new Error('Worker URL må starte med https://');
   return u;
 }
 
-function setStatus(id, type, html) {
-  document.getElementById(id).innerHTML = `<div class="status ${type}"><span>${html}</span></div>`;
+function setBanner(id, type, html) {
+  document.getElementById(id).innerHTML = `<div class="banner ${type}"><span>${html}</span></div>`;
 }
 
-/* ─── WooCommerce ─── */
+/* ── WooCommerce ── */
 async function connectWC() {
   try {
     const base = getWorkerUrl();
-    setStatus('wc_status','loading','<span class="spin" style="display:inline-block;vertical-align:middle;margin-right:8px"></span>Henter produkter...');
-    let all = [], page = 1;
+    setBanner('wc_status','loading','<span class="spin" style="display:inline-block;vertical-align:middle;margin-right:8px"></span>Kobler til WooCommerce...');
+    document.getElementById('cfgDot').className = 'config-status';
 
+    let all = [], page = 1;
     while(true) {
       const r = await fetch(`${base}/wc/products?per_page=100&page=${page}&status=publish`, {
         headers: { 'X-Auth-Hash': AUTH_HASH }
@@ -313,12 +559,12 @@ async function connectWC() {
             if(vr.ok) {
               const vars = await vr.json();
               for(const v of vars) {
-                if(v.sku) all.push({ name: p.name + (v.attributes?.length ? ' — ' + v.attributes.map(a=>a.option).join(' / ') : ''), sku: v.sku, price: v.regular_price||v.price||'' });
+                if(v.sku) all.push({ name: p.name + (v.attributes?.length?' — '+v.attributes.map(a=>a.option).join(' / '):''), sku:v.sku, price:v.regular_price||v.price||'' });
               }
             }
-          } catch(e) { /* skip */ }
+          } catch(e) {}
         } else if(p.sku) {
-          all.push({ name: p.name, sku: p.sku, price: p.regular_price||p.price||'' });
+          all.push({ name:p.name, sku:p.sku, price:p.regular_price||p.price||'' });
         }
       }
       page++;
@@ -326,14 +572,27 @@ async function connectWC() {
     }
 
     S.products = all;
-    setStatus('wc_status','success',`✓ Hentet <strong>${all.length} produkter/varianter</strong> med SKU.`);
-    setTimeout(() => setStep(2), 700);
+    document.getElementById('cfgDot').className = 'config-status ok';
+    setBanner('wc_status','success',`Hentet <strong>${all.length} produkter/varianter</strong> med SKU fra WooCommerce.`);
+
+    // Show product preview in step 2
+    const prev = all.slice(0,8).map(p=>`<span style="color:var(--brown)">${p.sku}</span>  ${p.name.slice(0,50)}${p.name.length>50?'…':''}`).join('<br>');
+    document.getElementById('productPreview').innerHTML = prev + (all.length > 8 ? `<br><span style="color:var(--taupe)">… og ${all.length-8} til</span>` : '');
+    document.getElementById('productCountBadge').textContent = `${all.length} produkter lastet`;
+
+    setTimeout(() => setStep(2), 800);
   } catch(e) {
-    setStatus('wc_status','error', e.message);
+    document.getElementById('cfgDot').className = 'config-status err';
+    setBanner('wc_status','error', e.message);
   }
 }
 
-/* ─── File ─── */
+/* ── File ── */
+function addInst(txt) {
+  const el = document.getElementById('aiInst');
+  el.value = el.value ? el.value.trim() + '\n' + txt : txt;
+}
+
 const dz = document.getElementById('dropZone');
 dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('over'));
@@ -341,7 +600,8 @@ dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over
 
 function handleFile(f) {
   S.file = f;
-  document.getElementById('fileBadge').innerHTML = `<div class="file-badge"><span>📄</span><span>${f.name}</span><span style="color:var(--text3);font-size:11px;margin-left:4px">${(f.size/1024).toFixed(0)} KB</span><span class="rm" onclick="clearFile()">×</span></div>`;
+  const ext = f.name.split('.').pop().toLowerCase();
+  document.getElementById('fileBadge').innerHTML = `<div class="file-pill"><span class="fp-name">${f.name}</span><span class="fp-size">${(f.size/1024).toFixed(0)} KB</span><span class="fp-rm" onclick="clearFile()">×</span></div>`;
   document.getElementById('analyzeBtn').disabled = false;
 }
 function clearFile() {
@@ -351,7 +611,7 @@ function clearFile() {
   document.getElementById('analyzeBtn').disabled = true;
 }
 
-/* ─── Analysis ─── */
+/* ── Analysis ── */
 async function runAnalysis() {
   if(!S.file) return;
   setStep(3);
@@ -363,60 +623,114 @@ async function runAnalysis() {
   function log(msg, cls='') { logEl.innerHTML += `<div class="${cls}">${msg}</div>`; logEl.scrollTop = 9999; }
   function setMsg(t) { document.getElementById('progressMsg').textContent = t; }
 
-  log(`→ Fil: ${S.file.name}`);
-  log(`→ ${S.products.length} WooCommerce-produkter lastet`);
+  log(`→ Fil: ${S.file.name} (${(S.file.size/1024).toFixed(0)} KB)`);
+  log(`→ ${S.products.length} produkter lastet fra WooCommerce`);
 
   try {
     const ext = S.file.name.split('.').pop().toLowerCase();
     const instructions = document.getElementById('aiInst').value.trim();
-    const productList = S.products.map(p=>`${p.sku}|${p.name}|${p.price}`).join('\n');
     const toBase64 = f => new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(f); });
-    const prompt = buildPrompt(productList, instructions);
-    let messages = [];
 
+    // Compress product list: truncate names to 40 chars, skip price (saves ~30% tokens)
+    const compressedList = S.products.map(p=>`${p.sku}|${p.name.slice(0,40)}|${p.price}`).join('\n');
+
+    // Estimate tokens: ~4 chars per token. Reserve ~80k for file + prompt overhead.
+    const MAX_PRODUCT_TOKENS = 80000;
+    const estimatedTokens = Math.ceil(compressedList.length / 4);
+    const BATCH_SIZE = 1500; // products per batch when splitting
+
+    setMsg('Forbereder fil for analyse...');
+
+    // Prepare file content once
+    let fileContent = null; // { type, data } for binary; null means text
+    let fileText = '';
     if(['png','jpg','jpeg'].includes(ext)) {
-      const b64 = await toBase64(S.file);
-      messages = [{ role:'user', content:[{ type:'image', source:{ type:'base64', media_type:S.file.type||'image/jpeg', data:b64 }},{ type:'text', text:prompt }]}];
+      fileContent = { kind:'image', b64: await toBase64(S.file), mt: S.file.type||'image/jpeg' };
+      log('→ Bilde lastet og kodet');
     } else if(ext === 'pdf') {
-      const b64 = await toBase64(S.file);
-      messages = [{ role:'user', content:[{ type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 }},{ type:'text', text:prompt }]}];
+      fileContent = { kind:'pdf', b64: await toBase64(S.file) };
+      log('→ PDF lastet og kodet');
     } else {
-      const text = await S.file.text();
-      messages = [{ role:'user', content: prompt + '\n\n<prisliste>\n' + text.slice(0,40000) + '\n</prisliste>' }];
+      fileText = await S.file.text();
+      log(`→ Tekstfil lest (${fileText.length.toLocaleString()} tegn)`);
     }
 
-    log('→ Sender til Claude AI via Worker...');
-    setMsg('Analyserer med AI...');
-
     const base = getWorkerUrl();
-    const resp = await fetch(`${base}/ai`, {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json', 'X-Auth-Hash': AUTH_HASH },
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:4000,
-        system:'Du er en prismatching-ekspert for en WooCommerce-nettbutikk. Returner KUN gyldig JSON, ingen forklaring, ingen markdown-kodeblokker.',
-        messages
-      })
-    });
 
-    const data = await resp.json();
-    if(data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    async function callAI(productChunk, isFirst) {
+      const prompt = buildPrompt(productChunk, isFirst ? instructions : '');
+      let messages = [];
+      if(fileContent?.kind === 'image') {
+        messages = [{ role:'user', content:[{ type:'image', source:{ type:'base64', media_type:fileContent.mt, data:fileContent.b64 }},{ type:'text', text:prompt }]}];
+      } else if(fileContent?.kind === 'pdf') {
+        messages = [{ role:'user', content:[{ type:'document', source:{ type:'base64', media_type:'application/pdf', data:fileContent.b64 }},{ type:'text', text:prompt }]}];
+      } else {
+        messages = [{ role:'user', content: prompt + '\n\n<prisliste>\n' + fileText.slice(0,40000) + '\n</prisliste>' }];
+      }
 
-    let raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
-    const result = JSON.parse(raw);
-    S.matches = result.matches || [];
+      const resp = await fetch(`${base}/ai`, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'X-Auth-Hash': AUTH_HASH },
+        body: JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:4000,
+          system:'Du er en prismatching-ekspert for en WooCommerce-nettbutikk. Returner KUN gyldig JSON, ingen forklaring, ingen markdown-kodeblokker.',
+          messages
+        })
+      });
+      const data = await resp.json();
+      if(data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+      let raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+      return JSON.parse(raw);
+    }
 
-    log(`→ ${S.matches.filter(m=>m.include).length} matcher funnet`, 'ok');
-    log(`→ ${S.matches.filter(m=>!m.include).length} uten match`, 'warn');
+    let allMatches = [];
+    let summary = '';
+
+    if(estimatedTokens <= MAX_PRODUCT_TOKENS) {
+      // Single request
+      log(`→ Sender ${S.products.length} produkter i én request...`);
+      setMsg('Claude analyserer prislisten...');
+      const result = await callAI(compressedList, true);
+      allMatches = result.matches || [];
+      summary = result.summary || '';
+    } else {
+      // Split into batches
+      const batches = [];
+      for(let i = 0; i < S.products.length; i += BATCH_SIZE) {
+        batches.push(S.products.slice(i, i + BATCH_SIZE));
+      }
+      log(`→ ${S.products.length} produkter delt i ${batches.length} batches à ~${BATCH_SIZE}`, 'warn');
+
+      for(let i = 0; i < batches.length; i++) {
+        const chunk = batches[i].map(p=>`${p.sku}|${p.name.slice(0,40)}|${p.price}`).join('\n');
+        setMsg(`Analyserer batch ${i+1} av ${batches.length}...`);
+        log(`→ Batch ${i+1}/${batches.length} (${batches[i].length} produkter)...`);
+        const result = await callAI(chunk, i === 0);
+        const batchMatches = (result.matches || []).filter(m=>m.include&&m.sku);
+        allMatches = allMatches.concat(result.matches || []);
+        log(`→ Batch ${i+1}: ${batchMatches.length} matcher`, 'ok');
+        if(result.summary && i === batches.length-1) summary = result.summary;
+      }
+    }
+
+    S.matches = allMatches;
+
+    const matched = S.matches.filter(m=>m.include&&m.sku);
+    const skipped = S.matches.filter(m=>!m.include);
+    log(`→ ${matched.length} matcher funnet totalt`, 'ok');
+    log(`→ ${skipped.length} produkter uten match`, 'warn');
+    if(summary) log(`→ AI: ${summary}`, 'ok');
 
     renderMatches();
+    buildSummary();
     document.getElementById('analysisProgress').style.display = 'none';
     document.getElementById('reviewArea').style.display = 'block';
     document.getElementById('exportBtn').disabled = false;
+
   } catch(e) {
     log(`✗ Feil: ${e.message}`, 'err');
-    setMsg('Analyse feilet');
+    setMsg('Analyse feilet — se logg');
   }
 }
 
@@ -426,31 +740,37 @@ function buildPrompt(productList, instructions) {
 Her er alle produkter og varianter med SKU (format: SKU|Navn|NåværendePris):
 ${productList}
 
-${instructions ? `Instruksjoner: ${instructions}\n` : ''}
-Les prislisten og returner et JSON-objekt:
+${instructions ? `Instruksjoner fra bruker:\n${instructions}\n` : ''}
+Les prislisten og returner et JSON-objekt med denne strukturen:
 {
   "matches": [
     {
       "sku": "EKSAKT-SKU-FRA-LISTEN",
-      "name": "Produktnavn",
-      "old_price": "nåværende pris",
-      "new_price": "ny pris (kun tall, punktum som desimal, f.eks. 1299.00)",
+      "name": "Produktnavn fra butikken",
+      "old_price": "nåværende pris som streng",
+      "new_price": "ny pris kun tall med punktum som desimal f.eks 1299.00",
       "match_type": "exact",
       "confidence": 0.95,
       "include": true,
-      "note": ""
+      "note": "valgfri kommentar"
     }
-  ]
+  ],
+  "summary": "Kort oppsummering på norsk: hvor mange priser endret seg, gjennomsnittlig endring osv."
 }
 
-Regler: Bruk eksakt SKU fra listen. Bare tall i new_price. Sett include:false hvis prisen er uendret. Ikke inkluder produkter du ikke finner i prislisten.`;
+Regler:
+- Bruk alltid eksakt SKU fra listen
+- new_price: kun tall, punktum som desimalskilletegn
+- Sett include:false hvis prisen er uendret
+- Ikke inkluder produkter du ikke finner i prislisten
+- Match på produktnavn der SKU ikke finnes direkte i prislisten`;
 }
 
-/* ─── Render table ─── */
+/* ── Render ── */
 let currentFilter = 'all';
 function setFilter(f, btn) {
   currentFilter = f;
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderRows();
 }
@@ -471,27 +791,50 @@ function renderRows() {
     if(currentFilter==='match') return m.include&&m.sku;
     if(currentFilter==='changed') return m.include&&m.old_price!==m.new_price;
     if(currentFilter==='skip') return !m.include;
+    if(currentFilter==='up') return m.include&&parseFloat(m.new_price)>parseFloat(m.old_price);
+    if(currentFilter==='down') return m.include&&parseFloat(m.new_price)<parseFloat(m.old_price);
     return true;
   });
 
   document.getElementById('matchBody').innerHTML = filtered.map(m => {
     const idx = S.matches.indexOf(m);
     const op = parseFloat(m.old_price)||0, np = parseFloat(m.new_price)||0, diff = np-op;
-    const diffHtml = op&&np&&diff!==0 ? `<span class="${diff>0?'pup':'pdown'}" style="margin-left:4px">${diff>0?'↑':'↓'}${Math.abs(diff).toFixed(0)}</span>` : '';
+    const pct = op ? ((diff/op)*100).toFixed(1) : '';
+    const diffHtml = op&&np&&diff!==0 ? `<span class="${diff>0?'price-up':'price-down'}">${diff>0?'↑':'↓'}${Math.abs(diff).toFixed(0)}${pct?` (${Math.abs(pct)}%)`:''}` : '';
     const badge = !m.include?'skip':m.match_type==='exact'?'match':'new';
-    const label = badge==='skip'?'Ikke matchet':badge==='match'?'Match':'Ny pris';
+    const label = badge==='skip'?'Ikke matchet':badge==='match'?'Match':'Fuzzy';
     return `<tr>
       <td><span class="badge ${badge}">${label}</span></td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(m.name||'').replace(/"/g,'&quot;')}">${m.name||'—'}</td>
-      <td style="font-family:'Courier New',monospace;font-size:12px;color:var(--text2)">${m.sku||'—'}</td>
-      <td>${m.old_price?`kr ${m.old_price}`:'—'}</td>
-      <td>${m.new_price?`kr ${m.new_price}`:'—'}${diffHtml}</td>
-      <td><input type="checkbox" ${m.include?'checked':''} onchange="S.matches[${idx}].include=this.checked;updateCSV()"></td>
+      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(m.name||'').replace(/"/g,'&quot;')}">${m.name||'—'}</td>
+      <td style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--mid)">${m.sku||'—'}</td>
+      <td style="font-family:'Courier Prime',monospace;font-size:12px">${m.old_price?`kr ${m.old_price}`:'—'}</td>
+      <td style="font-family:'Courier Prime',monospace;font-size:12px">${m.new_price?`kr ${m.new_price}`:'—'}${diffHtml}</td>
+      <td><input type="checkbox" ${m.include?'checked':''} onchange="S.matches[${idx}].include=this.checked;updateCSV();buildSummary()"></td>
     </tr>`;
   }).join('');
 }
 
-/* ─── CSV ─── */
+function buildSummary() {
+  const inc = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
+  const up = inc.filter(r=>parseFloat(r.new_price)>parseFloat(r.old_price));
+  const down = inc.filter(r=>parseFloat(r.new_price)<parseFloat(r.old_price));
+  const unchanged = inc.filter(r=>parseFloat(r.new_price)===parseFloat(r.old_price));
+
+  if(!inc.length) return;
+
+  const avgUp = up.length ? (up.reduce((s,r)=>s+(parseFloat(r.new_price)-parseFloat(r.old_price)),0)/up.length).toFixed(0) : 0;
+  const avgDown = down.length ? (down.reduce((s,r)=>s+(parseFloat(r.old_price)-parseFloat(r.new_price)),0)/down.length).toFixed(0) : 0;
+
+  document.getElementById('summaryCard').style.display = 'block';
+  document.getElementById('summaryContent').innerHTML = `
+    ${up.length ? `<span style="color:var(--red)">↑ ${up.length} produkter får prisøkning</span> (snitt +kr ${avgUp})<br>` : ''}
+    ${down.length ? `<span style="color:var(--green)">↓ ${down.length} produkter får prisreduksjon</span> (snitt -kr ${avgDown})<br>` : ''}
+    ${unchanged.length ? `<span style="color:var(--mid)">${unchanged.length} produkter er uendret</span><br>` : ''}
+    <br><strong>${inc.length} rader</strong> vil bli eksportert til CSV.
+  `;
+}
+
+/* ── CSV ── */
 function updateCSV() {
   const rows = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
   S.csv = ['SKU,pris', ...rows.map(r=>`${r.sku},${r.new_price}`)].join('\n');
@@ -503,17 +846,19 @@ function prepExport() {
   document.getElementById('expCount').textContent = rows.length;
   document.getElementById('expUp').textContent = rows.filter(r=>parseFloat(r.new_price)>parseFloat(r.old_price)).length;
   document.getElementById('expDown').textContent = rows.filter(r=>parseFloat(r.new_price)<parseFloat(r.old_price)).length;
-  const lines = ['SKU,pris', ...rows.slice(0,6).map(r=>`${r.sku},${r.new_price}`)];
-  document.getElementById('csvPreview').textContent = lines.join('\n') + (rows.length>6?'\n…':'');
+  const lines = ['SKU,pris', ...rows.slice(0,8).map(r=>`${r.sku},${r.new_price}`)];
+  document.getElementById('csvPreview').textContent = lines.join('\n') + (rows.length>8?'\n…':'');
   setStep(4);
 }
 
 function downloadCSV() {
-  if(!S.csv) return;
-  const blob = new Blob([S.csv], { type:'text/csv;charset=utf-8;' });
+  if(!S.csv) { updateCSV(); }
+  const rows = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
+  const csv = ['SKU,pris', ...rows.map(r=>`${r.sku},${r.new_price}`)].join('\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `prisoppdatering_${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `novooi-prisoppdatering_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
 }
 </script>
