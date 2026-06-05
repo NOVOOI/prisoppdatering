@@ -634,10 +634,11 @@ async function runAnalysis() {
     // Compress product list: truncate names to 40 chars, skip price (saves ~30% tokens)
     const compressedList = S.products.map(p=>`${p.sku}|${p.name.slice(0,40)}|${p.price}`).join('\n');
 
-    // Estimate tokens: ~4 chars per token. Reserve ~80k for file + prompt overhead.
-    const MAX_PRODUCT_TOKENS = 80000;
+    // PDF/image files consume ~100-150k tokens alone — force small batches for binary files
+    const isBinaryFile = ['png','jpg','jpeg','pdf'].includes(ext);
+    const MAX_PRODUCT_TOKENS = isBinaryFile ? 18000 : 80000;
     const estimatedTokens = Math.ceil(compressedList.length / 4);
-    const BATCH_SIZE = 1500; // products per batch when splitting
+    const BATCH_SIZE = isBinaryFile ? 450 : 1500;
 
     setMsg('Forbereder fil for analyse...');
 
