@@ -675,13 +675,18 @@ async function runAnalysis() {
         body: JSON.stringify({
           model:'claude-sonnet-4-20250514',
           max_tokens:4000,
-          system:'Du er en prismatching-ekspert for en WooCommerce-nettbutikk. Returner KUN gyldig JSON, ingen forklaring, ingen markdown-kodeblokker.',
+          system:'Du er en prismatching-ekspert. Svar ALLTID med kun et JSON-objekt som starter med { og slutter med }. Ingen innledning, ingen forklaring, ingen ```-blokker. Første tegn i svaret ditt skal være {.',
           messages
         })
       });
       const data = await resp.json();
       if(data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-      let raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+      let raw = data.content.map(b=>b.text||'').join('');
+      // Extract JSON object even if Claude adds preamble text
+      const jsonStart = raw.indexOf('{');
+      const jsonEnd = raw.lastIndexOf('}');
+      if(jsonStart === -1 || jsonEnd === -1) throw new Error('Ingen JSON i svar: ' + raw.slice(0,100));
+      raw = raw.slice(jsonStart, jsonEnd+1);
       return JSON.parse(raw);
     }
 
