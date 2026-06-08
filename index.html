@@ -528,6 +528,7 @@ async function startAnalysis(){
       setFileStatus(idx,'Leser prisliste...','running');
       setBar(`pb_${idx}`,20);
 
+      // Ask Claude to return CSV (sku,price) — far shorter output than JSON, never truncates
       const extractPrompt = buildExtractPrompt(instructions);
       let messages=[];
       if(fileContent?.kind==='image') messages=[{role:'user',content:[{type:'image',source:{type:'base64',media_type:fileContent.mt,data:fileContent.b64}},{type:'text',text:extractPrompt}]}];
@@ -536,18 +537,29 @@ async function startAnalysis(){
 
       fileLog(idx,'→ Sender til Claude for prisuttrekk...');
       const resp=await fetch(`${base}/ai`,{method:'POST',headers:{'Content-Type':'application/json','X-Auth-Hash':AUTH_HASH},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4096,
-          system:'Du er en prisuttrekkings-ekspert. Svar ALLTID med kun et JSON-objekt som starter med { og slutter med }. Ingen innledning, ingen forklaring, ingen ```-blokker.',
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:8096,
+          system:'Du er en prisuttrekkings-ekspert. Returner KUN rå CSV-tekst, ingen overskrift, ingen forklaring, ingen kodeblokker. Format per linje: artikkelnummer,pris',
           messages})});
 
       const data=await resp.json();
       if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
-      let raw=data.content.map(b=>b.text||'').join('');
-      const s=raw.indexOf('{'), e=raw.lastIndexOf('}');
-      if(s===-1||e===-1) throw new Error('Ingen JSON: '+raw.slice(0,120));
-      const extracted=JSON.parse(raw.slice(s,e+1));
+      const raw=data.content.map(b=>b.text||'').join('').trim();
 
-      fileLog(idx,`→ Claude fant ${(extracted.products||[]).length} produkter i filen`,'ok');
+      // Parse CSV lines into products array
+      const extractedProducts_raw = raw.split('\n')
+        .map(line=>line.trim())
+        .filter(line=>line && line.includes(','))
+        .map(line=>{
+          const comma=line.indexOf(',');
+          const sku=line.slice(0,comma).trim().replace(/^["']/,'').replace(/["']$/,'');
+          const price=line.slice(comma+1).trim().replace(/[^0-9.,]/g,'').replace(',','.').trim();
+          return {sku, price};
+        })
+        .filter(p=>p.sku && p.price && parseFloat(p.price)>0);
+
+      const extracted = { products: extractedProducts_raw.map(p=>({sku:p.sku, name:'', price:p.price})) };
+
+      fileLog(idx,`→ Claude fant ${extracted.products.length} produkter i filen`,'ok');
       setBar(`pb_${idx}`,70);
 
       // Now match extracted products against WooCommerce SKUs in JS
@@ -562,9 +574,9 @@ async function startAnalysis(){
       const nameMap = new Map(S.products.map(p=>[p.name.toLowerCase().trim(), p]));
 
       for(const ep of extractedProducts){
-        const epSku=(ep.sku||'').toLowerCase().trim();
-        const epName=(ep.name||'').toLowerCase().trim();
-        const newPrice=String(ep.price||'').replace(/[^0-9.,]/g,'').replace(',','.').trim();
+        const epSku=(ep.s||ep.sku||'').toLowerCase().trim();
+        const epName=(ep.n||ep.name||'').toLowerCase().trim();
+        const newPrice=String(ep.p||ep.price||'').replace(/[^0-9.,]/g,'').replace(',','.').trim();
         if(!newPrice) continue;
 
         let wcProduct=null;
@@ -651,10 +663,14 @@ async function startAnalysis(){
 function buildExtractPrompt(instructions){
   return `Trekk ut alle produkter fra denne prislisten.${instructions?'\n'+instructions:''}
 
-Returner kun JSON:
-{"products":[{"sku":"artikkelnr","name":"navn","price":"1299.00"}]}
+Returner KUN CSV-linjer, ingen header, ingen forklaring:
+artikkelnummer,pris
 
-Regler: price kun tall med punktum. Hent eksakt pris fra filen.`;
+Eksempel:
+LK-HJELLE-ADA-HOY,19348.00
+LK-HJELLE-LOOP,8490.00
+
+Regler: Eksakt pris slik den står i filen. Kun tall med punktum som desimal.`;
 }
 /* ── Render ── */
 function setFilter(f,btn){ currentFilter=f; document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRows(); }
