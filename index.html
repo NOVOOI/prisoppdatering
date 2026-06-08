@@ -536,7 +536,7 @@ async function startAnalysis(){
 
       fileLog(idx,'→ Sender til Claude for prisuttrekk...');
       const resp=await fetch(`${base}/ai`,{method:'POST',headers:{'Content-Type':'application/json','X-Auth-Hash':AUTH_HASH},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4096,
           system:'Du er en prisuttrekkings-ekspert. Svar ALLTID med kun et JSON-objekt som starter med { og slutter med }. Ingen innledning, ingen forklaring, ingen ```-blokker.',
           messages})});
 
@@ -649,22 +649,12 @@ async function startAnalysis(){
   }
 }
 function buildExtractPrompt(instructions){
-  return `Du er en prisuttrekkings-ekspert. Les prislisten og trekk ut ALLE produkter med pris.
+  return `Trekk ut alle produkter fra denne prislisten.${instructions?'\n'+instructions:''}
 
-${instructions?`Instruksjoner:\n${instructions}\n`:''}
-Returner et JSON-objekt:
-{
-  "products": [
-    {
-      "sku": "produkt-artikkelnummer fra filen (tom streng hvis ikke oppgitt)",
-      "name": "produktnavn slik det står i filen",
-      "price": "pris som tall med punktum som desimal f.eks 1299.00 — HENT EKSAKT PRIS FRA FILEN, ikke regn ut",
-      "note": "variant/farge/størrelse eller andre detaljer"
-    }
-  ]
-}
+Returner kun JSON:
+{"products":[{"sku":"artikkelnr","name":"navn","price":"1299.00"}]}
 
-VIKTIG: Hent prisen nøyaktig slik den står i filen. Ikke rund av, ikke estimer. Hvis prisen er 19348 i filen skal price være 19348.00.`;
+Regler: price kun tall med punktum. Hent eksakt pris fra filen.`;
 }
 /* ── Render ── */
 function setFilter(f,btn){ currentFilter=f; document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRows(); }
