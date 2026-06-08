@@ -523,109 +523,147 @@ async function startAnalysis(){
         fileLog(idx,`→ Tekstfil (${fileText.length.toLocaleString()} tegn)`);
       }
 
-      // NEW APPROACH: Ask Claude to extract ALL products from the file first,
-      // then we match against WooCommerce SKUs in JS — no batching needed, no hallucinated prices.
-      setFileStatus(idx,'Leser prisliste...','running');
-      setBar(`pb_${idx}`,20);
+      async function callHaiku(systemPrompt, userContent, maxTokens=8096){
+        const messages = Array.isArray(userContent)
+          ? [{role:'user',content:userContent}]
+          : [{role:'user',content:userContent}];
+        const resp=await fetch(`${base}/ai`,{method:'POST',
+          headers:{'Content-Type':'application/json','X-Auth-Hash':AUTH_HASH},
+          body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTokens,system:systemPrompt,messages})});
+        const data=await resp.json();
+        if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
+        return data.content.map(b=>b.text||'').join('').trim();
+      }
 
-      // Ask Claude to return CSV (sku,price) — far shorter output than JSON, never truncates
-      const extractPrompt = buildExtractPrompt(instructions);
-      let messages=[];
-      if(fileContent?.kind==='image') messages=[{role:'user',content:[{type:'image',source:{type:'base64',media_type:fileContent.mt,data:fileContent.b64}},{type:'text',text:extractPrompt}]}];
-      else if(fileContent?.kind==='pdf') messages=[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:fileContent.b64}},{type:'text',text:extractPrompt}]}];
-      else messages=[{role:'user',content:extractPrompt+'\n\n<prisliste>\n'+fileText.slice(0,40000)+'\n</prisliste>'}];
+      // ── TRINN 1: Trekk ut produktnavn + pris fra leverandørfilen ──
+      fileLog(idx,'→ Trinn 1: Trekker ut produkter og priser fra fil...');
+      setBar(`pb_${idx}`,15);
 
-      fileLog(idx,'→ Sender til Claude for prisuttrekk...');
-      const resp=await fetch(`${base}/ai`,{method:'POST',headers:{'Content-Type':'application/json','X-Auth-Hash':AUTH_HASH},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:8096,
-          system:'Du er en prisuttrekkings-ekspert. Returner KUN rå CSV-tekst, ingen overskrift, ingen forklaring, ingen kodeblokker. Format per linje: artikkelnummer,pris',
-          messages})});
+      const extractSystem = 'Du er en prisuttrekkings-ekspert. Returner KUN rå CSV-tekst, ingen header, ingen forklaring. Format per linje: fullt_produktnavn,pris';
+      const extractPrompt = `Trekk ut alle produkter fra denne prislisten.${instructions?'\n'+instructions:''}
 
-      const data=await resp.json();
-      if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
-      const raw=data.content.map(b=>b.text||'').join('').trim();
+Returner CSV-linjer:
+produktnavn,pris
 
-      // Parse CSV lines into products array
-      const extractedProducts_raw = raw.split('\n')
-        .map(line=>line.trim())
-        .filter(line=>line && line.includes(','))
-        .map(line=>{
-          const comma=line.indexOf(',');
-          const sku=line.slice(0,comma).trim().replace(/^["']/,'').replace(/["']$/,'');
-          const price=line.slice(comma+1).trim().replace(/[^0-9.,]/g,'').replace(',','.').trim();
-          return {sku, price};
+Regler:
+- Produktnavn skal være så fullstendig som mulig: modellnavn + variant + farge + materiale + størrelse
+- Pris: kun tall med punktum som desimal
+- Hent eksakt pris slik den står i filen`;
+
+      let extractContent;
+      if(fileContent?.kind==='image') extractContent=[{type:'image',source:{type:'base64',media_type:fileContent.mt,data:fileContent.b64}},{type:'text',text:extractPrompt}];
+      else if(fileContent?.kind==='pdf') extractContent=[{type:'document',source:{type:'base64',media_type:'application/pdf',data:fileContent.b64}},{type:'text',text:extractPrompt}];
+      else extractContent=extractPrompt+'\n\n<prisliste>\n'+fileText.slice(0,40000)+'\n</prisliste>';
+
+      const extractRaw = await callHaiku(extractSystem, extractContent, 8096);
+
+      const supplierProducts = extractRaw.split('\n')
+        .map(l=>l.trim()).filter(l=>l&&l.includes(','))
+        .map(l=>{
+          const ci=l.lastIndexOf(',');
+          const name=l.slice(0,ci).trim().replace(/^["']/,'').replace(/["']$/,'');
+          const price=l.slice(ci+1).trim().replace(/[^0-9.,]/g,'').replace(',','.').trim();
+          return {name,price};
         })
-        .filter(p=>p.sku && p.price && parseFloat(p.price)>0);
+        .filter(p=>p.name&&p.price&&parseFloat(p.price)>0);
 
-      const extracted = { products: extractedProducts_raw.map(p=>({sku:p.sku, name:'', price:p.price})) };
+      fileLog(idx,`→ Fant ${supplierProducts.length} produkter i filen`,'ok');
+      setBar(`pb_${idx}`,40);
 
-      fileLog(idx,`→ Claude fant ${extracted.products.length} produkter i filen`,'ok');
-      setBar(`pb_${idx}`,70);
+      if(supplierProducts.length===0){
+        fileLog(idx,'✗ Ingen produkter funnet i filen','err');
+        setFileStatus(idx,'Feilet','error');
+        return [];
+      }
 
-      // Now match extracted products against WooCommerce SKUs in JS
-      setFileStatus(idx,'Matcher mot WooCommerce...','running');
-      fileLog(idx,'→ Matcher mot WooCommerce-katalog...');
+      // ── TRINN 2: Semantisk matching mot WooCommerce ──
+      // Strategy: send ALL WC products + ALL supplier products to Claude in chunks.
+      // Claude understands that "Ada Høy Kontorstol" = "Ada Office Stol Høy" and
+      // that variants (farge/materiale/armlener) must also match.
+      // Chunk by supplier products (not WC) to keep WC list stable per call.
 
-      const extractedProducts = extracted.products || [];
+      fileLog(idx,'→ Trinn 2: Semantisk matching mot WooCommerce...');
+      setBar(`pb_${idx}`,50);
+
+      // Build compact WC list: sku|name  (truncate name to 60 chars to save tokens)
+      const wcListFull = S.products.map(p=>`${p.sku}|${p.name.slice(0,60)}`).join('\n');
+
+      // Split supplier products into chunks of 30 — send all WC products each time
+      // WC list ~3000 products × ~25 chars = ~75k chars ≈ 19k tokens (affordable with Haiku)
+      const SP_CHUNK = 30;
+      const allMatches = [];
+
+      for(let ci=0; ci<supplierProducts.length; ci+=SP_CHUNK){
+        const chunk = supplierProducts.slice(ci, ci+SP_CHUNK);
+        const supplierList = chunk.map((p,i)=>`${ci+i}|${p.name}|${p.price}`).join('\n');
+
+        const matchSystem = 'Du er en produktmatching-ekspert for en møbel- og interiørnettbutikk. Returner KUN CSV-linjer, ingen header, ingen forklaring, ingen tomme linjer.';
+        const matchPrompt = `Match leverandørprodukter mot nettbutikkprodukter basert på semantisk likhet.
+
+VIKTIG: Produktnavn er IKKE identiske. Eksempler på samme produkt:
+- Leverandør: "Ada High Office Chair Armrests Leather Cognac Vintage"
+  Nettbutikk: "Ada Office Stol Høy med Armer — Skinn Cognac Vintage"
+- Leverandør: "Loop Base Low"
+  Nettbutikk: "Loop Kontorstol Lav — Stoff Sort"
+
+Varianter (farge, materiale, størrelse, armlener) MÅ stemme overens for at det er en match.
+
+LEVERANDØRPRODUKTER (format: id|navn|pris):
+${supplierList}
+
+NETTBUTIKKPRODUKTER (format: sku|navn):
+${wcListFull}
+
+Returner kun sikre matcher:
+leverandør_id,sku,pris
+
+Ikke match hvis du er usikker. Ikke match hvis variant ikke stemmer.`;
+
+        const matchRaw = await callHaiku(matchSystem, matchPrompt, 2048);
+
+        const chunkMatches = matchRaw.split('\n')
+          .map(l=>l.trim()).filter(l=>l&&l.includes(','))
+          .map(l=>{ const p=l.split(','); return {supId:parseInt(p[0]),sku:(p[1]||'').trim(),price:(p[2]||'').trim()}; })
+          .filter(m=>!isNaN(m.supId)&&m.sku&&m.price);
+
+        allMatches.push(...chunkMatches);
+        setBar(`pb_${idx}`, 50 + Math.round(((ci+SP_CHUNK)/supplierProducts.length)*45));
+        fileLog(idx,`→ Batch ${Math.floor(ci/SP_CHUNK)+1}/${Math.ceil(supplierProducts.length/SP_CHUNK)}: ${chunkMatches.length} matcher`);
+      }
+
+      fileLog(idx,`→ Totalt ${allMatches.length} matcher funnet`,'ok');
+
+      // Build final fileMatches
+      const skuMap = new Map(S.products.map(p=>[p.sku,p]));
       const fileMatches = [];
+      const seenSkus = new Set();
 
-      // Build lookup maps for fast matching
-      const skuMap = new Map(S.products.map(p=>[p.sku.toLowerCase().trim(), p]));
-      const nameMap = new Map(S.products.map(p=>[p.name.toLowerCase().trim(), p]));
-
-      for(const ep of extractedProducts){
-        const epSku=(ep.s||ep.sku||'').toLowerCase().trim();
-        const epName=(ep.n||ep.name||'').toLowerCase().trim();
-        const newPrice=String(ep.p||ep.price||'').replace(/[^0-9.,]/g,'').replace(',','.').trim();
-        if(!newPrice) continue;
-
-        let wcProduct=null;
-        let matchType='fuzzy';
-
-        // 1. Exact SKU match
-        if(epSku && skuMap.has(epSku)){
-          wcProduct=skuMap.get(epSku);
-          matchType='exact';
-        }
-        // 2. Partial SKU match (ep SKU contained in WC SKU or vice versa)
-        if(!wcProduct && epSku){
-          for(const [wSku,wp] of skuMap){
-            if(wSku.includes(epSku)||epSku.includes(wSku)){
-              wcProduct=wp; matchType='fuzzy'; break;
-            }
-          }
-        }
-        // 3. Name match
-        if(!wcProduct && epName){
-          for(const [wName,wp] of nameMap){
-            if(wName.includes(epName)||epName.includes(wName)){
-              wcProduct=wp; matchType='fuzzy'; break;
-            }
-          }
-        }
-
-        if(wcProduct){
-          const priceChanged = parseFloat(newPrice) !== parseFloat(wcProduct.price);
-          fileMatches.push({
-            sku: wcProduct.sku,
-            name: wcProduct.name,
-            old_price: wcProduct.price,
-            new_price: newPrice,
-            match_type: matchType,
-            confidence: matchType==='exact'?1.0:0.8,
-            include: priceChanged,
-            note: ep.note||''
-          });
-        }
+      for(const m of allMatches){
+        const sp = supplierProducts[m.supId];
+        const wc = skuMap.get(m.sku);
+        if(!sp||!wc||seenSkus.has(m.sku)) continue;
+        seenSkus.add(m.sku);
+        const newPrice = m.price.replace(/[^0-9.]/g,'');
+        if(!newPrice||parseFloat(newPrice)<=0) continue;
+        const priceChanged = parseFloat(newPrice) !== parseFloat(wc.price);
+        fileMatches.push({
+          sku: wc.sku,
+          name: wc.name,
+          old_price: wc.price,
+          new_price: newPrice,
+          match_type: 'exact',
+          confidence: 1.0,
+          include: priceChanged,
+          note: ''
+        });
       }
 
       const sourceName=f.name.replace(/\.[^.]+$/,'').slice(0,30);
       fileMatches.forEach(m=>m._source=sourceName);
 
-      const inc=fileMatches.filter(m=>m.include&&m.sku);
+      const inc=fileMatches.filter(m=>m.include);
       fileLog(idx,`→ ${inc.length} produkter med prisendring`,'ok');
       fileLog(idx,`→ ${fileMatches.filter(m=>!m.include).length} uten prisendring`,'warn');
-      fileLog(idx,`→ ${extractedProducts.length - fileMatches.length} ikke matchet mot WooCommerce`,'warn');
       setFileStatus(idx,`${inc.length} endringer`,'done');
       setBar(`pb_${idx}`,100);
       return fileMatches;
@@ -660,18 +698,7 @@ async function startAnalysis(){
     document.getElementById('cfgDot').className='config-status err';
   }
 }
-function buildExtractPrompt(instructions){
-  return `Trekk ut alle produkter fra denne prislisten.${instructions?'\n'+instructions:''}
 
-Returner KUN CSV-linjer, ingen header, ingen forklaring:
-artikkelnummer,pris
-
-Eksempel:
-LK-HJELLE-ADA-HOY,19348.00
-LK-HJELLE-LOOP,8490.00
-
-Regler: Eksakt pris slik den står i filen. Kun tall med punktum som desimal.`;
-}
 /* ── Render ── */
 function setFilter(f,btn){ currentFilter=f; document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRows(); }
 function setSrcFilter(src){ currentSource=src; document.querySelectorAll('.src-tab').forEach(t=>t.classList.toggle('active',t.dataset.src===src)); renderRows(); }
