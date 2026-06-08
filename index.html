@@ -588,6 +588,8 @@ leverandør_id,sku,pris`;
 
       const matchRaw=await callHaiku(matchSystem, matchPrompt, 4096);
 
+      fileLog(idx,`→ Matching råsvar (første 300 tegn): ${matchRaw.slice(0,300)}`);
+      fileLog(idx,`→ Uttrekk råsvar (første 200 tegn): ${extractRaw.slice(0,200)}`);
       const allMatches=matchRaw.split('\n')
         .map(l=>l.trim()).filter(l=>l&&l.includes(','))
         .map(l=>{ const p=l.split(','); return {supId:parseInt(p[0]),sku:(p[1]||'').trim(),price:(p[2]||'').trim()}; })
