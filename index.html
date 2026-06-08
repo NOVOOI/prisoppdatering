@@ -524,9 +524,7 @@ async function startAnalysis(){
       }
 
       async function callHaiku(systemPrompt, userContent, maxTokens=8096){
-        const messages = Array.isArray(userContent)
-          ? [{role:'user',content:userContent}]
-          : [{role:'user',content:userContent}];
+        const messages=[{role:'user',content:Array.isArray(userContent)?userContent:userContent}];
         const resp=await fetch(`${base}/ai`,{method:'POST',
           headers:{'Content-Type':'application/json','X-Auth-Hash':AUTH_HASH},
           body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTokens,system:systemPrompt,messages})});
@@ -535,136 +533,94 @@ async function startAnalysis(){
         return data.content.map(b=>b.text||'').join('').trim();
       }
 
-      // ── TRINN 1: Trekk ut produktnavn + pris fra leverandørfilen ──
-      fileLog(idx,'→ Trinn 1: Trekker ut produkter og priser fra fil...');
+      // ── TRINN 1: Trekk ut produktnavn + pris fra leverandørfilen (1 kall) ──
+      fileLog(idx,'→ Trinn 1: Leser prisliste...');
       setBar(`pb_${idx}`,15);
 
-      const extractSystem = 'Du er en prisuttrekkings-ekspert. Returner KUN rå CSV-tekst, ingen header, ingen forklaring. Format per linje: fullt_produktnavn,pris';
-      const extractPrompt = `Trekk ut alle produkter fra denne prislisten.${instructions?'\n'+instructions:''}
-
-Returner CSV-linjer:
-produktnavn,pris
-
-Regler:
-- Produktnavn skal være så fullstendig som mulig: modellnavn + variant + farge + materiale + størrelse
-- Pris: kun tall med punktum som desimal
-- Hent eksakt pris slik den står i filen`;
+      const extractSystem='Returner KUN rå CSV, ingen header, ingen forklaring. Format: fullt_produktnavn,pris';
+      const extractPrompt=`Trekk ut alle produkter.${instructions?'\n'+instructions:''}\nCSV: navn,pris\nRegler: Fullstendig navn inkl. variant/farge/materiale/størrelse. Eksakt pris med punktum.`;
 
       let extractContent;
       if(fileContent?.kind==='image') extractContent=[{type:'image',source:{type:'base64',media_type:fileContent.mt,data:fileContent.b64}},{type:'text',text:extractPrompt}];
       else if(fileContent?.kind==='pdf') extractContent=[{type:'document',source:{type:'base64',media_type:'application/pdf',data:fileContent.b64}},{type:'text',text:extractPrompt}];
-      else extractContent=extractPrompt+'\n\n<prisliste>\n'+fileText.slice(0,40000)+'\n</prisliste>';
+      else extractContent=extractPrompt+'\n\n'+fileText.slice(0,40000);
 
-      const extractRaw = await callHaiku(extractSystem, extractContent, 8096);
+      const extractRaw=await callHaiku(extractSystem, extractContent, 8096);
 
-      const supplierProducts = extractRaw.split('\n')
+      const supplierProducts=extractRaw.split('\n')
         .map(l=>l.trim()).filter(l=>l&&l.includes(','))
-        .map(l=>{
-          const ci=l.lastIndexOf(',');
-          const name=l.slice(0,ci).trim().replace(/^["']/,'').replace(/["']$/,'');
-          const price=l.slice(ci+1).trim().replace(/[^0-9.,]/g,'').replace(',','.').trim();
-          return {name,price};
-        })
+        .map(l=>{ const ci=l.lastIndexOf(','); return {name:l.slice(0,ci).trim().replace(/^["']/,'').replace(/["']$/,''), price:l.slice(ci+1).trim().replace(/[^0-9.,]/g,'').replace(',','.').trim()}; })
         .filter(p=>p.name&&p.price&&parseFloat(p.price)>0);
 
       fileLog(idx,`→ Fant ${supplierProducts.length} produkter i filen`,'ok');
-      setBar(`pb_${idx}`,40);
+      setBar(`pb_${idx}`,45);
 
-      if(supplierProducts.length===0){
-        fileLog(idx,'✗ Ingen produkter funnet i filen','err');
-        setFileStatus(idx,'Feilet','error');
-        return [];
-      }
+      if(!supplierProducts.length){ fileLog(idx,'✗ Ingen produkter funnet','err'); setFileStatus(idx,'Feilet','error'); return []; }
 
-      // ── TRINN 2: Semantisk matching mot WooCommerce ──
-      // Strategy: send ALL WC products + ALL supplier products to Claude in chunks.
-      // Claude understands that "Ada Høy Kontorstol" = "Ada Office Stol Høy" and
-      // that variants (farge/materiale/armlener) must also match.
-      // Chunk by supplier products (not WC) to keep WC list stable per call.
+      // ── TRINN 2: Semantisk matching — 1 kall, alle leverandørprodukter på én gang ──
+      // Send WC list once + all supplier products once = 2 total API calls per file.
+      // WC list compressed to "sku|navn" truncated to 50 chars ≈ 16k tokens.
+      fileLog(idx,'→ Trinn 2: Matcher mot WooCommerce (1 kall)...');
+      setBar(`pb_${idx}`,55);
 
-      fileLog(idx,'→ Trinn 2: Semantisk matching mot WooCommerce...');
-      setBar(`pb_${idx}`,50);
+      const wcList=S.products.map(p=>`${p.sku}|${p.name.slice(0,50)}`).join('\n');
+      const supplierList=supplierProducts.map((p,i)=>`${i}|${p.name}|${p.price}`).join('\n');
 
-      // Build compact WC list: sku|name  (truncate name to 60 chars to save tokens)
-      const wcListFull = S.products.map(p=>`${p.sku}|${p.name.slice(0,60)}`).join('\n');
+      const matchSystem='Du er en produktmatching-ekspert for møbler og interiør. Returner KUN CSV, ingen header, ingen forklaring.';
+      const matchPrompt=`Match leverandørprodukter mot nettbutikkprodukter basert på semantisk likhet.
 
-      // Split supplier products into chunks of 30 — send all WC products each time
-      // WC list ~3000 products × ~25 chars = ~75k chars ≈ 19k tokens (affordable with Haiku)
-      const SP_CHUNK = 30;
-      const allMatches = [];
+Produktnavn er IKKE identiske mellom leverandør og nettbutikk — de beskriver samme produkt på ulike måter.
+Eksempler på gyldige matcher:
+- "Ada High Office Chair Armrests Leather Cognac" → "Ada Office Stol Høy med Armer — Skinn Cognac Vintage"
+- "Loop Low Base" → "Loop Kontorstol Lav"
+- "Nunatak Candleholder Small" → "Nunatak Lysestake Liten"
 
-      for(let ci=0; ci<supplierProducts.length; ci+=SP_CHUNK){
-        const chunk = supplierProducts.slice(ci, ci+SP_CHUNK);
-        const supplierList = chunk.map((p,i)=>`${ci+i}|${p.name}|${p.price}`).join('\n');
+Variant MÅ stemme: farge, materiale, størrelse og armlener må matche. Ikke match ved tvil.
 
-        const matchSystem = 'Du er en produktmatching-ekspert for en møbel- og interiørnettbutikk. Returner KUN CSV-linjer, ingen header, ingen forklaring, ingen tomme linjer.';
-        const matchPrompt = `Match leverandørprodukter mot nettbutikkprodukter basert på semantisk likhet.
-
-VIKTIG: Produktnavn er IKKE identiske. Eksempler på samme produkt:
-- Leverandør: "Ada High Office Chair Armrests Leather Cognac Vintage"
-  Nettbutikk: "Ada Office Stol Høy med Armer — Skinn Cognac Vintage"
-- Leverandør: "Loop Base Low"
-  Nettbutikk: "Loop Kontorstol Lav — Stoff Sort"
-
-Varianter (farge, materiale, størrelse, armlener) MÅ stemme overens for at det er en match.
-
-LEVERANDØRPRODUKTER (format: id|navn|pris):
+LEVERANDØRPRODUKTER (id|navn|pris):
 ${supplierList}
 
-NETTBUTIKKPRODUKTER (format: sku|navn):
-${wcListFull}
+NETTBUTIKKPRODUKTER (sku|navn):
+${wcList}
 
-Returner kun sikre matcher:
-leverandør_id,sku,pris
+Returner sikre matcher som CSV:
+leverandør_id,sku,pris`;
 
-Ikke match hvis du er usikker. Ikke match hvis variant ikke stemmer.`;
+      const matchRaw=await callHaiku(matchSystem, matchPrompt, 4096);
 
-        const matchRaw = await callHaiku(matchSystem, matchPrompt, 2048);
+      const allMatches=matchRaw.split('\n')
+        .map(l=>l.trim()).filter(l=>l&&l.includes(','))
+        .map(l=>{ const p=l.split(','); return {supId:parseInt(p[0]),sku:(p[1]||'').trim(),price:(p[2]||'').trim()}; })
+        .filter(m=>!isNaN(m.supId)&&m.sku&&m.price);
 
-        const chunkMatches = matchRaw.split('\n')
-          .map(l=>l.trim()).filter(l=>l&&l.includes(','))
-          .map(l=>{ const p=l.split(','); return {supId:parseInt(p[0]),sku:(p[1]||'').trim(),price:(p[2]||'').trim()}; })
-          .filter(m=>!isNaN(m.supId)&&m.sku&&m.price);
+      fileLog(idx,`→ ${allMatches.length} matcher funnet`,'ok');
+      setBar(`pb_${idx}`,85);
 
-        allMatches.push(...chunkMatches);
-        setBar(`pb_${idx}`, 50 + Math.round(((ci+SP_CHUNK)/supplierProducts.length)*45));
-        fileLog(idx,`→ Batch ${Math.floor(ci/SP_CHUNK)+1}/${Math.ceil(supplierProducts.length/SP_CHUNK)}: ${chunkMatches.length} matcher`);
-      }
-
-      fileLog(idx,`→ Totalt ${allMatches.length} matcher funnet`,'ok');
-
-      // Build final fileMatches
-      const skuMap = new Map(S.products.map(p=>[p.sku,p]));
-      const fileMatches = [];
-      const seenSkus = new Set();
+      // Build result
+      const skuMap=new Map(S.products.map(p=>[p.sku,p]));
+      const fileMatches=[];
+      const seenSkus=new Set();
 
       for(const m of allMatches){
-        const sp = supplierProducts[m.supId];
-        const wc = skuMap.get(m.sku);
+        const sp=supplierProducts[m.supId];
+        const wc=skuMap.get(m.sku);
         if(!sp||!wc||seenSkus.has(m.sku)) continue;
         seenSkus.add(m.sku);
-        const newPrice = m.price.replace(/[^0-9.]/g,'');
+        const newPrice=m.price.replace(/[^0-9.]/g,'');
         if(!newPrice||parseFloat(newPrice)<=0) continue;
-        const priceChanged = parseFloat(newPrice) !== parseFloat(wc.price);
         fileMatches.push({
-          sku: wc.sku,
-          name: wc.name,
-          old_price: wc.price,
-          new_price: newPrice,
-          match_type: 'exact',
-          confidence: 1.0,
-          include: priceChanged,
-          note: ''
+          sku:wc.sku, name:wc.name, old_price:wc.price, new_price:newPrice,
+          match_type:'exact', confidence:1.0,
+          include:parseFloat(newPrice)!==parseFloat(wc.price), note:''
         });
       }
 
       const sourceName=f.name.replace(/\.[^.]+$/,'').slice(0,30);
       fileMatches.forEach(m=>m._source=sourceName);
 
-      const inc=fileMatches.filter(m=>m.include);
-      fileLog(idx,`→ ${inc.length} produkter med prisendring`,'ok');
+      fileLog(idx,`→ ${fileMatches.filter(m=>m.include).length} med prisendring`,'ok');
       fileLog(idx,`→ ${fileMatches.filter(m=>!m.include).length} uten prisendring`,'warn');
-      setFileStatus(idx,`${inc.length} endringer`,'done');
+      setFileStatus(idx,`${fileMatches.filter(m=>m.include).length} endringer`,'done');
       setBar(`pb_${idx}`,100);
       return fileMatches;
     }
