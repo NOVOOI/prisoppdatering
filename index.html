@@ -8,62 +8,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
 :root{
-  --cream:#f5f0e8;
-  --warm:#faf7f2;
-  --sand:#ede5d0;
-  --taupe:#c4b49a;
-  --brown:#8b7355;
-  --accent:#6b4f2a;
-  --dark:#2c2416;
-  --ink:#3d3020;
-  --mid:#6b6050;
-  --light:#a89e8e;
-  --border:#d4c8b0;
-  --border-light:#e8dfc8;
-  --green:#3a6b4f;
-  --green-bg:#eef5f0;
-  --red:#a0392a;
-  --red-bg:#faf0ee;
-  --amber:#8b5e1a;
-  --amber-bg:#fbf4e8;
-  --blue:#2a4f8b;
-  --blue-bg:#eef2fa;
+  --cream:#f5f0e8;--warm:#faf7f2;--sand:#ede5d0;--taupe:#c4b49a;
+  --brown:#8b7355;--accent:#6b4f2a;--dark:#2c2416;--ink:#3d3020;
+  --mid:#6b6050;--light:#a89e8e;--border:#d4c8b0;--border-light:#e8dfc8;
+  --green:#3a6b4f;--green-bg:#eef5f0;--red:#a0392a;--red-bg:#faf0ee;
+  --amber:#8b5e1a;--amber-bg:#fbf4e8;--blue:#2a4f8b;--blue-bg:#eef2fa;
 }
-
 body{background:var(--cream);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;font-size:16px;line-height:1.5}
-
-/* ── Topbar ── */
 .topbar{background:var(--dark);color:var(--cream);padding:0 2.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(255,255,255,0.06)}
 .topbar-left{display:flex;align-items:center;gap:16px}
-.topbar-logo{font-family:'Courier Prime',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream)}
+.topbar-logo{font-family:'Courier Prime',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase}
 .topbar-sep{width:1px;height:16px;background:rgba(255,255,255,0.15)}
 .topbar-title{font-size:13px;color:var(--taupe);letter-spacing:0.04em}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .topbar-tag{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);color:var(--taupe);padding:3px 10px}
-
-/* ── Gate ── */
 #gateOverlay{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:9999}
 .gate-inner{text-align:center;padding:3rem 2rem;width:100%;max-width:360px}
 .gate-logo{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--taupe);margin-bottom:2.5rem}
 .gate-inner h1{font-size:2.2rem;font-weight:300;letter-spacing:0.04em;color:var(--cream);margin-bottom:0.5rem}
-.gate-inner p{font-size:14px;color:var(--taupe);margin-bottom:2.5rem;letter-spacing:0.02em}
+.gate-inner p{font-size:14px;color:var(--taupe);margin-bottom:2.5rem}
 .gate-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:17px;padding:12px 16px;outline:none;text-align:center;letter-spacing:0.08em;margin-bottom:14px}
 .gate-input::placeholder{color:rgba(255,255,255,0.25)}
 .gate-input:focus{border-color:var(--taupe)}
 .gate-btn{width:100%;background:var(--cream);color:var(--dark);border:none;font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:14px;cursor:pointer;transition:opacity 0.15s}
 .gate-btn:hover{opacity:0.85}
-#gateError{font-size:13px;color:#e07060;margin-top:12px;min-height:18px;letter-spacing:0.02em}
-
-/* ── Layout ── */
-.main{max-width:940px;margin:0 auto;padding:3rem 2rem 5rem}
-
-/* ── Section headers ── */
+#gateError{font-size:13px;color:#e07060;margin-top:12px;min-height:18px}
+.main{max-width:960px;margin:0 auto;padding:2.5rem 2rem 5rem}
 .section-label{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--brown);margin-bottom:1rem}
-
-/* ── Worker config bar ── */
-.config-bar{background:var(--warm);border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:16px}
+.config-bar{background:var(--warm);border:1px solid var(--border);padding:1.1rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:16px}
 .config-bar label{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown);white-space:nowrap}
 .config-bar input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink);padding:4px 0;outline:none}
 .config-bar input:focus{border-bottom-color:var(--accent)}
@@ -71,75 +44,89 @@ body{background:var(--cream);color:var(--ink);font-family:'Cormorant Garamond',G
 .config-status{width:8px;height:8px;border-radius:50%;background:var(--taupe);flex-shrink:0;transition:background 0.3s}
 .config-status.ok{background:var(--green)}
 .config-status.err{background:var(--red)}
-
-/* ── Step bar ── */
 .steps{display:flex;border:1px solid var(--border);margin-bottom:2.5rem;background:var(--warm)}
 .step-item{flex:1;padding:14px 12px;text-align:center;cursor:pointer;border-right:1px solid var(--border);transition:background 0.15s;user-select:none}
 .step-item:last-child{border-right:none}
 .step-num{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--light);display:block;margin-bottom:4px}
-.step-name{font-size:13px;color:var(--mid);letter-spacing:0.02em}
+.step-name{font-size:13px;color:var(--mid)}
 .step-item.active{background:var(--sand)}
 .step-item.active .step-name{color:var(--ink);font-weight:500}
 .step-item.active .step-num{color:var(--brown)}
 .step-item.done .step-num{color:var(--green)}
 .step-item.done .step-name{color:var(--green)}
-
-/* ── Cards ── */
 .card{background:var(--warm);border:1px solid var(--border);padding:2rem;margin-bottom:1.25rem}
 .card-head{font-size:1.4rem;font-weight:400;letter-spacing:0.01em;margin-bottom:1.25rem;color:var(--dark)}
-
-/* ── Form ── */
 .field{margin-bottom:1.25rem}
 .field label{display:block;font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--brown);margin-bottom:8px}
 .field input[type="text"],.field input[type="password"],.field textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ink);padding:8px 0;outline:none;transition:border-color 0.15s}
 .field input:focus,.field textarea:focus{border-bottom-color:var(--accent)}
-.field input::placeholder,.field textarea::placeholder{color:var(--light)}
-.field textarea{resize:vertical;border:1px solid var(--border);padding:10px 12px;margin-top:0}
+.field textarea{resize:vertical;border:1px solid var(--border);padding:10px 12px}
 .field textarea:focus{border-color:var(--accent)}
-.field .hint{font-family:'Courier Prime',monospace;font-size:10px;color:var(--light);margin-top:6px;letter-spacing:0.04em}
-
-/* ── Buttons ── */
+.field .hint{font-family:'Courier Prime',monospace;font-size:10px;color:var(--light);margin-top:6px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--warm);color:var(--ink);transition:background 0.12s,border-color 0.12s}
 .btn:hover{background:var(--sand);border-color:var(--taupe)}
 .btn:active{transform:scale(0.99)}
 .btn:disabled{opacity:0.35;cursor:not-allowed;pointer-events:none}
 .btn.primary{background:var(--dark);color:var(--cream);border-color:var(--dark)}
 .btn.primary:hover{background:var(--accent);border-color:var(--accent)}
-
-/* ── Status banners ── */
 .banner{padding:12px 16px;font-size:14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.25rem;border-left:2px solid}
 .banner.info{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
 .banner.success{background:var(--green-bg);border-color:var(--green);color:var(--green)}
 .banner.error{background:var(--red-bg);border-color:var(--red);color:var(--red)}
 .banner.loading{background:var(--sand);border-color:var(--taupe);color:var(--mid)}
 .banner.warn{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
-.banner strong{font-weight:600}
 
-/* ── Drop zone ── */
-.drop-zone{border:1px dashed var(--border);padding:3rem 1.5rem;text-align:center;cursor:pointer;transition:border-color 0.15s,background 0.15s;color:var(--mid)}
+/* ── Multi-file drop zone ── */
+.drop-zone{border:1px dashed var(--border);padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color 0.15s,background 0.15s;color:var(--mid)}
 .drop-zone:hover,.drop-zone.over{border-color:var(--brown);background:var(--sand)}
-.drop-zone .dz-icon{font-size:28px;margin-bottom:10px;opacity:0.4}
+.drop-zone .dz-icon{font-size:26px;margin-bottom:10px;opacity:0.4}
 .drop-zone .dz-main{font-size:15px;letter-spacing:0.02em;margin-bottom:4px}
 .drop-zone .dz-sub{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--light)}
-.file-pill{display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);padding:6px 14px;font-size:13px;margin-top:12px}
-.file-pill .fp-name{color:var(--ink)}
-.file-pill .fp-size{font-family:'Courier Prime',monospace;font-size:10px;color:var(--light)}
-.file-pill .fp-rm{cursor:pointer;color:var(--light);margin-left:4px;font-size:16px;line-height:1}
-.file-pill .fp-rm:hover{color:var(--red)}
 
-/* ── Stats row ── */
+/* File list */
+.file-list{margin-top:1.25rem;display:flex;flex-direction:column;gap:8px}
+.file-row{display:flex;align-items:center;gap:12px;background:var(--sand);border:1px solid var(--border);padding:10px 14px}
+.file-row .fr-icon{font-family:'Courier Prime',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brown);background:var(--cream);border:1px solid var(--border);padding:2px 7px;flex-shrink:0}
+.file-row .fr-name{flex:1;font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-row .fr-size{font-family:'Courier Prime',monospace;font-size:10px;color:var(--light);flex-shrink:0}
+.file-row .fr-inst{flex:2;min-width:0}
+.file-row .fr-inst input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border-light);font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--mid);padding:3px 0;outline:none}
+.file-row .fr-inst input:focus{border-bottom-color:var(--accent)}
+.file-row .fr-inst input::placeholder{color:var(--light)}
+.file-row .fr-rm{cursor:pointer;color:var(--light);font-size:18px;line-height:1;flex-shrink:0}
+.file-row .fr-rm:hover{color:var(--red)}
+
+/* Progress cards per file */
+.prog-list{display:flex;flex-direction:column;gap:1rem}
+.prog-card{background:var(--warm);border:1px solid var(--border);padding:1.25rem 1.5rem}
+.prog-card .pc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.prog-card .pc-name{font-size:14px;color:var(--ink)}
+.prog-card .pc-status{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
+.prog-card .pc-status.running{color:var(--amber)}
+.prog-card .pc-status.done{color:var(--green)}
+.prog-card .pc-status.error{color:var(--red)}
+.prog-bar-wrap{height:2px;background:var(--border);margin-bottom:8px}
+.prog-bar{height:2px;background:var(--brown);transition:width 0.4s;width:0%}
+.prog-card .pc-log{font-family:'Courier Prime',monospace;font-size:11px;color:var(--mid);line-height:1.7;max-height:80px;overflow-y:auto}
+.pc-log .ok{color:var(--green)}
+.pc-log .warn{color:var(--amber)}
+.pc-log .err{color:var(--red)}
+
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
 .stat-cell{background:var(--warm);padding:1.25rem 1rem;text-align:center}
 .stat-val{font-size:2rem;font-weight:300;letter-spacing:-0.02em;line-height:1;margin-bottom:4px}
 .stat-lbl{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--light)}
-
-/* ── Filter pills ── */
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
 .fpill{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border:1px solid var(--border);background:var(--warm);cursor:pointer;color:var(--mid);transition:background 0.12s}
 .fpill:hover{background:var(--sand)}
 .fpill.active{background:var(--dark);color:var(--cream);border-color:var(--dark)}
 
-/* ── Match table ── */
+/* Source filter tabs */
+.src-tabs{display:flex;gap:0;border:1px solid var(--border);margin-bottom:1rem;background:var(--warm)}
+.src-tab{padding:8px 18px;font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;color:var(--mid);border-right:1px solid var(--border);transition:background 0.12s}
+.src-tab:last-child{border-right:none}
+.src-tab.active{background:var(--sand);color:var(--ink)}
+
 .tbl-wrap{overflow-x:auto;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;font-size:14px}
 thead tr{background:var(--dark)}
@@ -153,33 +140,18 @@ tbody tr:hover td{background:var(--sand)}
 .badge.skip{border-color:var(--border);color:var(--light);background:var(--sand)}
 .price-up{color:var(--red);font-size:11px;margin-left:4px}
 .price-down{color:var(--green);font-size:11px;margin-left:4px}
+.src-pill{font-family:'Courier Prime',monospace;font-size:9px;padding:2px 7px;background:var(--sand);border:1px solid var(--border);color:var(--mid)}
 
-/* ── Log ── */
-.log-box{background:var(--dark);color:#c8c0b0;padding:14px 16px;font-family:'Courier Prime',monospace;font-size:12px;max-height:200px;overflow-y:auto;line-height:1.8;letter-spacing:0.02em}
-.log-box .ok{color:#7dc4a0}
-.log-box .warn{color:#e0b060}
-.log-box .err{color:#e08070}
-
-/* ── CSV preview ── */
-.csv-pre{background:var(--dark);color:#c8c0b0;padding:14px 16px;font-family:'Courier Prime',monospace;font-size:12px;max-height:140px;overflow-y:auto;line-height:1.8;border:1px solid var(--border)}
-
-/* ── Workflow tips ── */
 .tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
 .tip-card{background:var(--warm);border:1px solid var(--border);padding:1.25rem 1.5rem}
 .tip-num{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px}
 .tip-title{font-size:1.05rem;font-weight:500;color:var(--dark);margin-bottom:6px}
 .tip-body{font-size:13px;color:var(--mid);line-height:1.6}
-
-/* ── Nav ── */
+.csv-pre{background:var(--dark);color:#c8c0b0;padding:14px 16px;font-family:'Courier Prime',monospace;font-size:12px;max-height:140px;overflow-y:auto;line-height:1.8;border:1px solid var(--border)}
 .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--border-light)}
-
-/* ── Spinner ── */
 .spin{display:inline-block;width:14px;height:14px;border:1.5px solid var(--border);border-top-color:var(--brown);border-radius:50%;animation:rot 0.7s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
-
-/* ── Divider ── */
 .divider{border:none;border-top:1px solid var(--border-light);margin:1.75rem 0}
-
 .panel{display:none}
 .panel.active{display:block}
 input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
@@ -187,7 +159,6 @@ input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:
 </head>
 <body>
 
-<!-- Gate -->
 <div id="gateOverlay">
   <div class="gate-inner">
     <div class="gate-logo">Novooi — Internt verktøy</div>
@@ -199,7 +170,6 @@ input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:
   </div>
 </div>
 
-<!-- Topbar -->
 <div class="topbar">
   <div class="topbar-left">
     <span class="topbar-logo">Novooi</span>
@@ -213,266 +183,173 @@ input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:
 </div>
 
 <div class="main">
-
-  <!-- Worker config -->
   <div class="config-bar">
     <span class="config-status" id="cfgDot"></span>
     <label>Worker URL</label>
     <input type="text" id="workerUrl" placeholder="https://prisoppdatering.brukernavn.workers.dev">
   </div>
 
-  <!-- Step bar -->
   <div class="steps">
-    <div class="step-item active" onclick="tryGoStep(1)">
-      <span class="step-num">01</span>
-      <span class="step-name">WooCommerce</span>
-    </div>
-    <div class="step-item" onclick="tryGoStep(2)">
-      <span class="step-num">02</span>
-      <span class="step-name">Prisliste</span>
-    </div>
-    <div class="step-item" onclick="tryGoStep(3)">
-      <span class="step-num">03</span>
-      <span class="step-name">Analyser</span>
-    </div>
-    <div class="step-item" onclick="tryGoStep(4)">
-      <span class="step-num">04</span>
-      <span class="step-name">Eksport</span>
-    </div>
+    <div class="step-item active" onclick="tryGoStep(1)"><span class="step-num">01</span><span class="step-name">Last opp</span></div>
+    <div class="step-item" onclick="tryGoStep(2)"><span class="step-num">02</span><span class="step-name">Analyser</span></div>
+    <div class="step-item" onclick="tryGoStep(3)"><span class="step-num">03</span><span class="step-name">Gjennomgå</span></div>
+    <div class="step-item" onclick="tryGoStep(4)"><span class="step-num">04</span><span class="step-name">Eksport</span></div>
   </div>
 
-  <!-- ── STEP 1 ── -->
+  <!-- ── STEP 1: Upload files ── -->
   <div class="panel active" id="panel1">
     <div class="card">
-      <div class="section-label">Tilkobling</div>
-      <div class="card-head">WooCommerce produktliste</div>
-      <div class="banner info">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>API-nøkler er lagret som krypterte hemmeligheter i Cloudflare Worker — aldri i nettleseren.</span>
+      <div class="section-label">Prislister</div>
+      <div class="card-head">Last opp leverandørprislister</div>
+      <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:1.5rem">Last opp én eller flere prislister. WooCommerce-produktene hentes og analyseres parallelt mens du venter.</p>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="dz-icon">↑</div>
+        <div class="dz-main">Slipp filer her, eller klikk for å bla</div>
+        <div class="dz-sub" style="margin-top:6px">PDF · XLSX · XLS · CSV · PNG · JPG — flere filer støttes</div>
       </div>
-      <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:1.5rem">Agenten henter alle produkter og varianter med SKU fra WooCommerce. Disse brukes til å matche mot leverandørens prisliste.</p>
-      <div id="wc_status"></div>
+      <input type="file" id="fileInput" style="display:none" accept=".pdf,.xlsx,.xls,.csv,.png,.jpg,.jpeg" multiple onchange="handleFiles(this.files)">
+      <div class="file-list" id="fileList"></div>
     </div>
 
-    <!-- Workflow tips step 1 -->
     <div class="card">
-      <div class="section-label">Workflow-guide</div>
-      <div class="tips-grid">
-        <div class="tip-card">
-          <div class="tip-num">Tips 01</div>
-          <div class="tip-title">Hvilke produkter hentes?</div>
-          <div class="tip-body">Alle publiserte produkter og varianter som har et SKU-nummer. Variable produkter hentes med alle varianter separat.</div>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">Tips 02</div>
-          <div class="tip-title">Krav til WooCommerce</div>
-          <div class="tip-body">Nøklene trenger kun <strong>lese</strong>-tilgang. Lag under WooCommerce → Innstillinger → Avansert → REST API.</div>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">Tips 03</div>
-          <div class="tip-title">Når bør du oppdatere?</div>
-          <div class="tip-body">Kjør denne agenten hver gang du mottar ny prisliste fra en leverandør. Typisk ved sesongskifte eller etter forhandlinger.</div>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">Tips 04</div>
-          <div class="tip-title">Feilsøking 403</div>
-          <div class="tip-body">403-feil betyr feil passord-hash. Åpne F12-konsollen og kjør: <code style="font-family:'Courier Prime',monospace;font-size:11px;background:var(--sand);padding:1px 4px">sha256('Novooi26')</code> for å verifisere.</div>
-        </div>
+      <div class="section-label">Globale instruksjoner</div>
+      <div class="card-head">Felles instruksjoner til AI</div>
+      <div class="field">
+        <label>Gjelder alle filer (valgfritt)</label>
+        <textarea id="globalInst" rows="3" placeholder="Eks: Priser er ekskl. mva — gang med 1.25.&#10;Eks: Ignorer produkter merket utgått eller avviklet."></textarea>
+      </div>
+      <div class="section-label" style="margin-bottom:8px">Hurtigmaler</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addGlobal('Priser er ekskl. mva — gang alle priser med 1.25.')">+ Ekskl. mva</button>
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addGlobal('Ignorer produkter merket utgått, avviklet eller discontinued.')">+ Ignorer utgåtte</button>
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addGlobal('Match på produktnavn og variantbeskrivelse der SKU ikke finnes direkte.')">+ Navnematching</button>
+        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addGlobal('Priser er oppgitt i EUR — konverter til NOK med kurs 11.80.')">+ EUR → NOK</button>
       </div>
     </div>
 
     <div class="nav-row">
       <div></div>
-      <button class="btn primary" onclick="connectWC()">Hent produkter fra WooCommerce →</button>
+      <button class="btn primary" id="startBtn" disabled onclick="startAnalysis()">Hent produkter &amp; analyser →</button>
     </div>
   </div>
 
-  <!-- ── STEP 2 ── -->
+  <!-- ── STEP 2: Fetch + Analyse (parallel) ── -->
   <div class="panel" id="panel2">
     <div class="card">
-      <div class="section-label">Fil</div>
-      <div class="card-head">Last opp prisliste</div>
-      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <div class="dz-icon">↑</div>
-        <div class="dz-main">Slipp fil her, eller klikk for å bla</div>
-        <div class="dz-sub" style="margin-top:6px">PDF · XLSX · XLS · CSV · PNG · JPG</div>
-      </div>
-      <input type="file" id="fileInput" style="display:none" accept=".pdf,.xlsx,.xls,.csv,.png,.jpg,.jpeg" onchange="handleFile(this.files[0])">
-      <div id="fileBadge"></div>
-    </div>
-
-    <div class="card">
-      <div class="section-label">AI-instruksjoner</div>
-      <div class="card-head">Tilleggsinformasjon til Claude</div>
-      <div class="field">
-        <label>Instruksjoner (valgfritt)</label>
-        <textarea id="aiInst" rows="4" placeholder="Eks: Priser er ekskl. mva — gang med 1.25 for å få inkl. mva.&#10;Eks: Ignorer produkter merket «utgått» eller «avviklet».&#10;Eks: Leverandøren bruker egne artikkelnummer — match mot produktnavn og variant."></textarea>
+      <div class="section-label">Status</div>
+      <div class="card-head">Henter og analyserer</div>
+      <div class="banner loading" id="overallStatus">
+        <span class="spin"></span>
+        <span id="overallMsg" style="margin-left:6px">Starter...</span>
       </div>
 
-      <!-- Common presets -->
-      <div class="section-label" style="margin-bottom:8px">Hurtigmaler</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Priser er ekskl. mva — gang alle priser med 1.25.')">+ Ekskl. mva</button>
-        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Ignorer produkter merket utgått, avviklet eller discontinued.')">+ Ignorer utgåtte</button>
-        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Match på produktnavn og variantbeskrivelse der SKU ikke finnes direkte.')">+ Navnematching</button>
-        <button class="btn" style="font-size:10px;padding:6px 14px" onclick="addInst('Priser er oppgitt i EUR — konverter til NOK med kurs 11.80.')">+ EUR → NOK</button>
+      <!-- WooCommerce fetch progress -->
+      <div style="margin-bottom:1.5rem">
+        <div class="section-label">WooCommerce</div>
+        <div class="prog-card" id="wcProgCard">
+          <div class="pc-header">
+            <span class="pc-name">Henter produktliste...</span>
+            <span class="pc-status running" id="wcStatus">Venter</span>
+          </div>
+          <div class="prog-bar-wrap"><div class="prog-bar" id="wcBar"></div></div>
+          <div class="pc-log" id="wcLog"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <div class="section-label">Produktoversikt</div>
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1rem">
-        <span style="font-size:1.1rem;color:var(--ink)">Laster produkter fra WooCommerce</span>
-        <span id="productCountBadge" style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--brown)"></span>
+      <!-- Per-file analysis progress -->
+      <div>
+        <div class="section-label">Prislister</div>
+        <div class="prog-list" id="progList"></div>
       </div>
-      <div id="productPreview" style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--mid);line-height:1.8"></div>
-    </div>
-
-    <div class="nav-row">
-      <button class="btn" onclick="tryGoStep(1)">← Tilbake</button>
-      <button class="btn primary" id="analyzeBtn" disabled onclick="runAnalysis()">Analyser med AI →</button>
     </div>
   </div>
 
-  <!-- ── STEP 3 ── -->
+  <!-- ── STEP 3: Review ── -->
   <div class="panel" id="panel3">
-    <div id="analysisProgress" style="display:none">
-      <div class="card">
-        <div class="section-label">Status</div>
-        <div class="banner loading">
-          <span class="spin"></span>
-          <span id="progressMsg" style="margin-left:4px">Analyserer...</span>
-        </div>
-        <div class="log-box" id="logBox"></div>
+    <div class="card">
+      <div class="section-label">Resultat</div>
+      <div class="card-head">Prismatching</div>
+      <div class="stats-row">
+        <div class="stat-cell"><div class="stat-val" id="statMatch">0</div><div class="stat-lbl">Matchet</div></div>
+        <div class="stat-cell"><div class="stat-val" id="statChanged">0</div><div class="stat-lbl">Endret pris</div></div>
+        <div class="stat-cell"><div class="stat-val" id="statSkip">0</div><div class="stat-lbl">Ikke matchet</div></div>
+      </div>
+
+      <!-- Source tabs (shown when multiple files) -->
+      <div id="srcTabsWrap" style="display:none">
+        <div class="section-label">Filtrer etter leverandør</div>
+        <div class="src-tabs" id="srcTabs"></div>
+      </div>
+
+      <div class="filter-row">
+        <button class="fpill active" onclick="setFilter('all',this)">Alle</button>
+        <button class="fpill" onclick="setFilter('match',this)">Matchet</button>
+        <button class="fpill" onclick="setFilter('changed',this)">Endret</button>
+        <button class="fpill" onclick="setFilter('skip',this)">Ikke matchet</button>
+        <button class="fpill" onclick="setFilter('up',this)">↑ Økning</button>
+        <button class="fpill" onclick="setFilter('down',this)">↓ Reduksjon</button>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:90px">Status</th>
+            <th>Produktnavn</th>
+            <th style="width:130px">SKU</th>
+            <th style="width:100px">Nåv. pris</th>
+            <th style="width:120px">Ny pris</th>
+            <th style="width:100px">Leverandør</th>
+            <th style="width:50px">Inkl.</th>
+          </tr></thead>
+          <tbody id="matchBody"></tbody>
+        </table>
       </div>
     </div>
 
-    <div id="reviewArea" style="display:none">
-      <div class="card">
-        <div class="section-label">Resultat</div>
-        <div class="card-head">Prismatching</div>
-        <div class="stats-row">
-          <div class="stat-cell">
-            <div class="stat-val" id="statMatch">0</div>
-            <div class="stat-lbl">Matchet</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-val" id="statChanged">0</div>
-            <div class="stat-lbl">Endret pris</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-val" id="statSkip">0</div>
-            <div class="stat-lbl">Ikke matchet</div>
-          </div>
-        </div>
-
-        <div id="aiSummary" style="margin-bottom:1.25rem;display:none">
-          <div class="banner warn" id="aiSummaryBox"></div>
-        </div>
-
-        <div class="filter-row">
-          <button class="fpill active" onclick="setFilter('all',this)">Alle</button>
-          <button class="fpill" onclick="setFilter('match',this)">Matchet</button>
-          <button class="fpill" onclick="setFilter('changed',this)">Endret</button>
-          <button class="fpill" onclick="setFilter('skip',this)">Ikke matchet</button>
-          <button class="fpill" onclick="setFilter('up',this)">↑ Prisøkning</button>
-          <button class="fpill" onclick="setFilter('down',this)">↓ Prisreduksjon</button>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr>
-              <th style="width:90px">Status</th>
-              <th>Produktnavn</th>
-              <th style="width:140px">SKU</th>
-              <th style="width:110px">Nåv. pris</th>
-              <th style="width:130px">Ny pris</th>
-              <th style="width:55px">Inkl.</th>
-            </tr></thead>
-            <tbody id="matchBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Summary card -->
-      <div class="card" id="summaryCard" style="display:none">
-        <div class="section-label">Oppsummering</div>
-        <div class="card-head">Prisendringer</div>
-        <div id="summaryContent" style="font-size:15px;color:var(--mid);line-height:1.8"></div>
-      </div>
+    <div class="card" id="summaryCard" style="display:none">
+      <div class="section-label">Oppsummering</div>
+      <div id="summaryContent" style="font-size:15px;color:var(--mid);line-height:1.9"></div>
     </div>
 
     <div class="nav-row">
-      <button class="btn" onclick="tryGoStep(2)">← Tilbake</button>
-      <button class="btn primary" id="exportBtn" disabled onclick="prepExport()">Generer CSV →</button>
+      <button class="btn" onclick="tryGoStep(1)">← Start på nytt</button>
+      <button class="btn primary" id="exportBtn" onclick="prepExport()">Generer CSV →</button>
     </div>
   </div>
 
-  <!-- ── STEP 4 ── -->
+  <!-- ── STEP 4: Export ── -->
   <div class="panel" id="panel4">
     <div class="card">
       <div class="section-label">Eksport</div>
       <div class="card-head">CSV klar for import</div>
-
       <div class="stats-row" style="margin-bottom:1.5rem">
-        <div class="stat-cell">
-          <div class="stat-val" id="expCount">0</div>
-          <div class="stat-lbl">Rader totalt</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-val" id="expUp" style="color:var(--red)">0</div>
-          <div class="stat-lbl">↑ Prisøkninger</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-val" id="expDown" style="color:var(--green)">0</div>
-          <div class="stat-lbl">↓ Reduksjoner</div>
-        </div>
+        <div class="stat-cell"><div class="stat-val" id="expCount">0</div><div class="stat-lbl">Rader totalt</div></div>
+        <div class="stat-cell"><div class="stat-val" id="expUp" style="color:var(--red)">0</div><div class="stat-lbl">↑ Prisøkninger</div></div>
+        <div class="stat-cell"><div class="stat-val" id="expDown" style="color:var(--green)">0</div><div class="stat-lbl">↓ Reduksjoner</div></div>
       </div>
-
       <div class="banner success" style="margin-bottom:1.5rem">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><polyline points="20 6 9 17 4 12"/></svg>
-        <span>CSV-filen er klar. Last opp under <strong>WooCommerce → Produkter → Importer</strong> og huk av <em>«Oppdater eksisterende produkter»</em>.</span>
+        <span>Last opp under <strong>WooCommerce → Produkter → Importer</strong>. Huk av <em>«Oppdater eksisterende produkter»</em>.</span>
       </div>
-
-      <div class="field">
+      <div class="field" style="margin-bottom:0">
         <label>Forhåndsvisning</label>
         <div class="csv-pre" id="csvPreview"></div>
       </div>
-
       <hr class="divider">
-
       <div class="section-label">Import-steg</div>
       <div class="tips-grid">
-        <div class="tip-card">
-          <div class="tip-num">Steg 01</div>
-          <div class="tip-title">Last ned CSV-filen</div>
-          <div class="tip-body">Klikk «Last ned» nedenfor. Filen inneholder kun SKU og pris, ingen andre felter som kan overskrive eksisterende data.</div>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">Steg 02</div>
-          <div class="tip-title">Åpne WooCommerce-import</div>
-          <div class="tip-body">Gå til <strong>Produkter → Alle produkter → Importer</strong> øverst på siden.</div>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">Steg 03</div>
-          <div class="tip-title">Konfigurer import</div>
-          <div class="tip-body">Velg filen, huk av <strong>«Oppdater eksisterende produkter»</strong>. Sørg for at SKU mappes til SKU og «pris» mappes til «Vanlig pris».</div>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">Steg 04</div>
-          <div class="tip-title">Verifiser etter import</div>
-          <div class="tip-body">Spot-sjekk 3–5 produkter manuelt i WooCommerce etter import for å bekrefte at prisene er korrekte.</div>
-        </div>
+        <div class="tip-card"><div class="tip-num">Steg 01</div><div class="tip-title">Last ned CSV-filen</div><div class="tip-body">Klikk «Last ned» nedenfor. Filen inneholder kun SKU og pris.</div></div>
+        <div class="tip-card"><div class="tip-num">Steg 02</div><div class="tip-title">Åpne WooCommerce-import</div><div class="tip-body">Produkter → Alle produkter → Importer øverst på siden.</div></div>
+        <div class="tip-card"><div class="tip-num">Steg 03</div><div class="tip-title">Konfigurer import</div><div class="tip-body">Huk av <strong>«Oppdater eksisterende produkter»</strong>. SKU → SKU, pris → Vanlig pris.</div></div>
+        <div class="tip-card"><div class="tip-num">Steg 04</div><div class="tip-title">Verifiser etter import</div><div class="tip-body">Spot-sjekk 3–5 produkter manuelt for å bekrefte at prisene er riktige.</div></div>
       </div>
     </div>
-
     <div class="nav-row">
       <button class="btn" onclick="tryGoStep(3)">← Tilbake</button>
       <button class="btn primary" onclick="downloadCSV()">↓ Last ned prisoppdatering.csv</button>
     </div>
   </div>
-
-</div><!-- /main -->
+</div>
 
 <script>
 /* ── Auth ── */
@@ -483,316 +360,338 @@ async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
 async function checkGate() {
   const pwd = document.getElementById('gatePwd').value;
   const hash = await sha256(pwd);
-  const expected = await sha256(PASSWORD);
-  if (hash === expected) {
-    AUTH_HASH = hash;
-    sessionStorage.setItem('nv_auth', hash);
+  if (hash === await sha256(PASSWORD)) {
+    AUTH_HASH = hash; sessionStorage.setItem('nv_auth', hash);
     document.getElementById('gateOverlay').style.display = 'none';
-  } else {
-    document.getElementById('gateError').textContent = 'Feil passord — prøv igjen.';
-  }
+  } else { document.getElementById('gateError').textContent = 'Feil passord.'; }
 }
-
-document.getElementById('gatePwd').addEventListener('keydown', e => { if(e.key==='Enter') checkGate(); });
-
-(async () => {
-  const stored = sessionStorage.getItem('nv_auth');
-  if (stored) { AUTH_HASH = stored; document.getElementById('gateOverlay').style.display = 'none'; }
-  const savedUrl = localStorage.getItem('nv_worker_url');
-  if (savedUrl) document.getElementById('workerUrl').value = savedUrl;
+document.getElementById('gatePwd').addEventListener('keydown', e=>{ if(e.key==='Enter') checkGate(); });
+(async()=>{
+  const s = sessionStorage.getItem('nv_auth');
+  if(s){ AUTH_HASH=s; document.getElementById('gateOverlay').style.display='none'; }
+  const u = localStorage.getItem('nv_worker_url');
+  if(u) document.getElementById('workerUrl').value = u;
 })();
-
-document.getElementById('workerUrl').addEventListener('input', function() {
-  localStorage.setItem('nv_worker_url', this.value.trim());
-  document.getElementById('cfgDot').className = 'config-status';
-});
+document.getElementById('workerUrl').addEventListener('input', function(){ localStorage.setItem('nv_worker_url', this.value.trim()); document.getElementById('cfgDot').className='config-status'; });
 
 /* ── State ── */
-const S = { step:1, products:[], file:null, matches:[], csv:'' };
+const S = { step:1, files:[], products:[], allMatches:[], csv:'' };
+let currentFilter='all', currentSource='all';
 
-function tryGoStep(n) { if(n <= S.step) setStep(n); }
-function setStep(n) {
-  S.step = n;
-  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===n-1));
-  document.querySelectorAll('.step-item').forEach((s,i) => {
-    s.classList.remove('active','done');
-    if(i < n-1) s.classList.add('done');
-    if(i === n-1) s.classList.add('active');
-  });
+function tryGoStep(n){ if(n<=S.step) setStep(n); }
+function setStep(n){
+  S.step=n;
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n-1));
+  document.querySelectorAll('.step-item').forEach((s,i)=>{ s.classList.remove('active','done'); if(i<n-1)s.classList.add('done'); if(i===n-1)s.classList.add('active'); });
 }
-
-function getWorkerUrl() {
-  const u = document.getElementById('workerUrl').value.trim().replace(/\/$/,'');
-  if(!u) throw new Error('Legg inn Cloudflare Worker URL øverst på siden.');
-  if(!u.startsWith('https://')) throw new Error('Worker URL må starte med https://');
+function getWorkerUrl(){
+  const u=document.getElementById('workerUrl').value.trim().replace(/\/$/,'');
+  if(!u) throw new Error('Legg inn Cloudflare Worker URL øverst.');
+  if(!u.startsWith('https://')) throw new Error('URL må starte med https://');
   return u;
 }
 
-function setBanner(id, type, html) {
-  document.getElementById(id).innerHTML = `<div class="banner ${type}"><span>${html}</span></div>`;
+/* ── File handling ── */
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);});
+
+function handleFiles(fileList){
+  for(const f of fileList){
+    if(!S.files.find(x=>x.file.name===f.name && x.file.size===f.size))
+      S.files.push({ file:f, inst:'' });
+  }
+  renderFileList();
+  document.getElementById('startBtn').disabled = S.files.length === 0;
 }
 
-/* ── WooCommerce ── */
-async function connectWC() {
+function renderFileList(){
+  const el = document.getElementById('fileList');
+  el.innerHTML = S.files.map((item,i)=>{
+    const ext = item.file.name.split('.').pop().toUpperCase();
+    return `<div class="file-row">
+      <span class="fr-icon">${ext}</span>
+      <span class="fr-name" title="${item.file.name}">${item.file.name}</span>
+      <span class="fr-size">${(item.file.size/1024).toFixed(0)} KB</span>
+      <div class="fr-inst"><input type="text" placeholder="Spesifikke instruksjoner for denne filen..." value="${item.inst}" oninput="S.files[${i}].inst=this.value"></div>
+      <span class="fr-rm" onclick="removeFile(${i})">×</span>
+    </div>`;
+  }).join('');
+}
+
+function removeFile(i){
+  S.files.splice(i,1);
+  renderFileList();
+  document.getElementById('startBtn').disabled = S.files.length===0;
+}
+
+function addGlobal(txt){
+  const el=document.getElementById('globalInst');
+  el.value=el.value?el.value.trim()+'\n'+txt:txt;
+}
+
+/* ── Main analysis flow ── */
+async function startAnalysis(){
+  setStep(2);
+  S.allMatches=[];
+
+  // Build per-file progress cards
+  const progList=document.getElementById('progList');
+  progList.innerHTML=S.files.map((item,i)=>`
+    <div class="prog-card" id="pc_${i}">
+      <div class="pc-header">
+        <span class="pc-name">${item.file.name}</span>
+        <span class="pc-status running" id="pcs_${i}">Venter på produktliste...</span>
+      </div>
+      <div class="prog-bar-wrap"><div class="prog-bar" id="pb_${i}"></div></div>
+      <div class="pc-log" id="pl_${i}"></div>
+    </div>`).join('');
+
+  function wcLog(msg){ const el=document.getElementById('wcLog'); el.innerHTML+=`<div>${msg}</div>`; el.scrollTop=9999; }
+  function fileLog(i,msg,cls=''){ const el=document.getElementById(`pl_${i}`); el.innerHTML+=`<div class="${cls}">${msg}</div>`; el.scrollTop=9999; }
+  function setBar(id,pct){ document.getElementById(id).style.width=pct+'%'; }
+  function setFileStatus(i,txt,cls){ const el=document.getElementById(`pcs_${i}`); el.textContent=txt; el.className=`pc-status ${cls}`; }
+  function setOverall(msg){ document.getElementById('overallMsg').textContent=msg; }
+
   try {
     const base = getWorkerUrl();
-    setBanner('wc_status','loading','<span class="spin" style="display:inline-block;vertical-align:middle;margin-right:8px"></span>Kobler til WooCommerce...');
-    document.getElementById('cfgDot').className = 'config-status';
+    const globalInst = document.getElementById('globalInst').value.trim();
 
-    let all = [], page = 1;
-    while(true) {
-      const r = await fetch(`${base}/wc/products?per_page=100&page=${page}&status=publish`, {
-        headers: { 'X-Auth-Hash': AUTH_HASH }
-      });
-      if(!r.ok) throw new Error(`HTTP ${r.status} — sjekk Worker-miljøvariabler og API-nøkler`);
+    // ── Fetch WooCommerce products ──
+    document.getElementById('wcStatus').textContent='Henter...';
+    document.getElementById('wcStatus').className='pc-status running';
+    setBar('wcBar', 10);
+    wcLog('→ Kobler til WooCommerce...');
+
+    let all=[], page=1;
+    while(true){
+      const r = await fetch(`${base}/wc/products?per_page=100&page=${page}&status=publish`,{ headers:{'X-Auth-Hash':AUTH_HASH} });
+      if(!r.ok) throw new Error(`WooCommerce HTTP ${r.status}`);
       const products = await r.json();
       if(!products.length) break;
-
-      for(const p of products) {
-        if(p.type === 'variable') {
-          try {
-            const vr = await fetch(`${base}/wc/products/${p.id}/variations?per_page=100`, { headers:{'X-Auth-Hash':AUTH_HASH} });
-            if(vr.ok) {
-              const vars = await vr.json();
-              for(const v of vars) {
-                if(v.sku) all.push({ name: p.name + (v.attributes?.length?' — '+v.attributes.map(a=>a.option).join(' / '):''), sku:v.sku, price:v.regular_price||v.price||'' });
-              }
-            }
-          } catch(e) {}
-        } else if(p.sku) {
-          all.push({ name:p.name, sku:p.sku, price:p.regular_price||p.price||'' });
+      for(const p of products){
+        if(p.type==='variable'){
+          try{
+            const vr=await fetch(`${base}/wc/products/${p.id}/variations?per_page=100`,{headers:{'X-Auth-Hash':AUTH_HASH}});
+            if(vr.ok){ const vars=await vr.json(); for(const v of vars){ if(v.sku) all.push({name:p.name+(v.attributes?.length?' — '+v.attributes.map(a=>a.option).join(' / '):''),sku:v.sku,price:v.regular_price||v.price||''}); } }
+          }catch(e){}
+        } else if(p.sku){
+          all.push({name:p.name,sku:p.sku,price:p.regular_price||p.price||''});
         }
       }
       page++;
-      if(products.length < 100) break;
+      wcLog(`→ Side ${page-1}: ${all.length} produkter lastet...`);
+      setBar('wcBar', Math.min(10 + (all.length/40), 90));
+      if(products.length<100) break;
     }
+    S.products=all;
+    setBar('wcBar',100);
+    document.getElementById('wcStatus').textContent=`${all.length} produkter`;
+    document.getElementById('wcStatus').className='pc-status done';
+    wcLog(`→ Ferdig: ${all.length} produkter med SKU`);
+    document.getElementById('cfgDot').className='config-status ok';
 
-    S.products = all;
-    document.getElementById('cfgDot').className = 'config-status ok';
-    setBanner('wc_status','success',`Hentet <strong>${all.length} produkter/varianter</strong> med SKU fra WooCommerce.`);
+    // ── Analyse alle filer parallelt ──
+    setOverall(`Analyserer ${S.files.length} prisliste${S.files.length>1?'r':''}...`);
 
-    // Show product preview in step 2
-    const prev = all.slice(0,8).map(p=>`<span style="color:var(--brown)">${p.sku}</span>  ${p.name.slice(0,50)}${p.name.length>50?'…':''}`).join('<br>');
-    document.getElementById('productPreview').innerHTML = prev + (all.length > 8 ? `<br><span style="color:var(--taupe)">… og ${all.length-8} til</span>` : '');
-    document.getElementById('productCountBadge').textContent = `${all.length} produkter lastet`;
+    const toBase64=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});
+    const compressedList=S.products.map(p=>`${p.sku}|${p.name.slice(0,40)}|${p.price}`).join('\n');
 
-    setTimeout(() => setStep(2), 800);
-  } catch(e) {
-    document.getElementById('cfgDot').className = 'config-status err';
-    setBanner('wc_status','error', e.message);
-  }
-}
+    async function analyseFile(item, idx){
+      const f=item.file;
+      const ext=f.name.split('.').pop().toLowerCase();
+      const instructions=[globalInst, item.inst].filter(Boolean).join('\n');
 
-/* ── File ── */
-function addInst(txt) {
-  const el = document.getElementById('aiInst');
-  el.value = el.value ? el.value.trim() + '\n' + txt : txt;
-}
+      setFileStatus(idx,'Forbereder fil...','running');
+      fileLog(idx,`→ ${f.name} (${(f.size/1024).toFixed(0)} KB)`);
 
-const dz = document.getElementById('dropZone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+      const toBase64=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});
 
-function handleFile(f) {
-  S.file = f;
-  const ext = f.name.split('.').pop().toLowerCase();
-  document.getElementById('fileBadge').innerHTML = `<div class="file-pill"><span class="fp-name">${f.name}</span><span class="fp-size">${(f.size/1024).toFixed(0)} KB</span><span class="fp-rm" onclick="clearFile()">×</span></div>`;
-  document.getElementById('analyzeBtn').disabled = false;
-}
-function clearFile() {
-  S.file = null;
-  document.getElementById('fileBadge').innerHTML = '';
-  document.getElementById('fileInput').value = '';
-  document.getElementById('analyzeBtn').disabled = true;
-}
-
-/* ── Analysis ── */
-async function runAnalysis() {
-  if(!S.file) return;
-  setStep(3);
-  document.getElementById('analysisProgress').style.display = 'block';
-  document.getElementById('reviewArea').style.display = 'none';
-  document.getElementById('exportBtn').disabled = true;
-
-  const logEl = document.getElementById('logBox');
-  function log(msg, cls='') { logEl.innerHTML += `<div class="${cls}">${msg}</div>`; logEl.scrollTop = 9999; }
-  function setMsg(t) { document.getElementById('progressMsg').textContent = t; }
-
-  log(`→ Fil: ${S.file.name} (${(S.file.size/1024).toFixed(0)} KB)`);
-  log(`→ ${S.products.length} produkter lastet fra WooCommerce`);
-
-  try {
-    const ext = S.file.name.split('.').pop().toLowerCase();
-    const instructions = document.getElementById('aiInst').value.trim();
-    const toBase64 = f => new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(f); });
-
-    // Compress product list: truncate names to 40 chars, skip price (saves ~30% tokens)
-    const compressedList = S.products.map(p=>`${p.sku}|${p.name.slice(0,40)}|${p.price}`).join('\n');
-
-    // PDF/image files consume ~100-150k tokens alone — force small batches for binary files
-    const isBinaryFile = ['png','jpg','jpeg','pdf'].includes(ext);
-    const MAX_PRODUCT_TOKENS = isBinaryFile ? 18000 : 80000;
-    const estimatedTokens = Math.ceil(compressedList.length / 4);
-    const BATCH_SIZE = isBinaryFile ? 450 : 1500;
-
-    setMsg('Forbereder fil for analyse...');
-
-    // Prepare file content once
-    let fileContent = null; // { type, data } for binary; null means text
-    let fileText = '';
-    if(['png','jpg','jpeg'].includes(ext)) {
-      fileContent = { kind:'image', b64: await toBase64(S.file), mt: S.file.type||'image/jpeg' };
-      log('→ Bilde lastet og kodet');
-    } else if(ext === 'pdf') {
-      fileContent = { kind:'pdf', b64: await toBase64(S.file) };
-      log('→ PDF lastet og kodet');
-    } else {
-      fileText = await S.file.text();
-      log(`→ Tekstfil lest (${fileText.length.toLocaleString()} tegn)`);
-    }
-
-    const base = getWorkerUrl();
-
-    async function callAI(productChunk, isFirst) {
-      const prompt = buildPrompt(productChunk, isFirst ? instructions : '');
-      let messages = [];
-      if(fileContent?.kind === 'image') {
-        messages = [{ role:'user', content:[{ type:'image', source:{ type:'base64', media_type:fileContent.mt, data:fileContent.b64 }},{ type:'text', text:prompt }]}];
-      } else if(fileContent?.kind === 'pdf') {
-        messages = [{ role:'user', content:[{ type:'document', source:{ type:'base64', media_type:'application/pdf', data:fileContent.b64 }},{ type:'text', text:prompt }]}];
+      let fileContent=null, fileText='';
+      if(['png','jpg','jpeg'].includes(ext)){
+        fileContent={kind:'image',b64:await toBase64(f),mt:f.type||'image/jpeg'};
+        fileLog(idx,'→ Bilde kodet');
+      } else if(ext==='pdf'){
+        fileContent={kind:'pdf',b64:await toBase64(f)};
+        fileLog(idx,'→ PDF kodet');
       } else {
-        messages = [{ role:'user', content: prompt + '\n\n<prisliste>\n' + fileText.slice(0,40000) + '\n</prisliste>' }];
+        fileText=await f.text();
+        fileLog(idx,`→ Tekstfil (${fileText.length.toLocaleString()} tegn)`);
       }
 
-      const resp = await fetch(`${base}/ai`, {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json', 'X-Auth-Hash': AUTH_HASH },
-        body: JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:4000,
-          system:'Du er en prismatching-ekspert. Svar ALLTID med kun et JSON-objekt som starter med { og slutter med }. Ingen innledning, ingen forklaring, ingen ```-blokker. Første tegn i svaret ditt skal være {.',
-          messages
-        })
-      });
-      const data = await resp.json();
-      if(data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-      let raw = data.content.map(b=>b.text||'').join('');
-      // Extract JSON object even if Claude adds preamble text
-      const jsonStart = raw.indexOf('{');
-      const jsonEnd = raw.lastIndexOf('}');
-      if(jsonStart === -1 || jsonEnd === -1) throw new Error('Ingen JSON i svar: ' + raw.slice(0,100));
-      raw = raw.slice(jsonStart, jsonEnd+1);
-      return JSON.parse(raw);
+      // NEW APPROACH: Ask Claude to extract ALL products from the file first,
+      // then we match against WooCommerce SKUs in JS — no batching needed, no hallucinated prices.
+      setFileStatus(idx,'Leser prisliste...','running');
+      setBar(`pb_${idx}`,20);
+
+      const extractPrompt = buildExtractPrompt(instructions);
+      let messages=[];
+      if(fileContent?.kind==='image') messages=[{role:'user',content:[{type:'image',source:{type:'base64',media_type:fileContent.mt,data:fileContent.b64}},{type:'text',text:extractPrompt}]}];
+      else if(fileContent?.kind==='pdf') messages=[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:fileContent.b64}},{type:'text',text:extractPrompt}]}];
+      else messages=[{role:'user',content:extractPrompt+'\n\n<prisliste>\n'+fileText.slice(0,40000)+'\n</prisliste>'}];
+
+      fileLog(idx,'→ Sender til Claude for prisuttrekk...');
+      const resp=await fetch(`${base}/ai`,{method:'POST',headers:{'Content-Type':'application/json','X-Auth-Hash':AUTH_HASH},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,
+          system:'Du er en prisuttrekkings-ekspert. Svar ALLTID med kun et JSON-objekt som starter med { og slutter med }. Ingen innledning, ingen forklaring, ingen ```-blokker.',
+          messages})});
+
+      const data=await resp.json();
+      if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
+      let raw=data.content.map(b=>b.text||'').join('');
+      const s=raw.indexOf('{'), e=raw.lastIndexOf('}');
+      if(s===-1||e===-1) throw new Error('Ingen JSON: '+raw.slice(0,120));
+      const extracted=JSON.parse(raw.slice(s,e+1));
+
+      fileLog(idx,`→ Claude fant ${(extracted.products||[]).length} produkter i filen`,'ok');
+      setBar(`pb_${idx}`,70);
+
+      // Now match extracted products against WooCommerce SKUs in JS
+      setFileStatus(idx,'Matcher mot WooCommerce...','running');
+      fileLog(idx,'→ Matcher mot WooCommerce-katalog...');
+
+      const extractedProducts = extracted.products || [];
+      const fileMatches = [];
+
+      // Build lookup maps for fast matching
+      const skuMap = new Map(S.products.map(p=>[p.sku.toLowerCase().trim(), p]));
+      const nameMap = new Map(S.products.map(p=>[p.name.toLowerCase().trim(), p]));
+
+      for(const ep of extractedProducts){
+        const epSku=(ep.sku||'').toLowerCase().trim();
+        const epName=(ep.name||'').toLowerCase().trim();
+        const newPrice=String(ep.price||'').replace(/[^0-9.,]/g,'').replace(',','.').trim();
+        if(!newPrice) continue;
+
+        let wcProduct=null;
+        let matchType='fuzzy';
+
+        // 1. Exact SKU match
+        if(epSku && skuMap.has(epSku)){
+          wcProduct=skuMap.get(epSku);
+          matchType='exact';
+        }
+        // 2. Partial SKU match (ep SKU contained in WC SKU or vice versa)
+        if(!wcProduct && epSku){
+          for(const [wSku,wp] of skuMap){
+            if(wSku.includes(epSku)||epSku.includes(wSku)){
+              wcProduct=wp; matchType='fuzzy'; break;
+            }
+          }
+        }
+        // 3. Name match
+        if(!wcProduct && epName){
+          for(const [wName,wp] of nameMap){
+            if(wName.includes(epName)||epName.includes(wName)){
+              wcProduct=wp; matchType='fuzzy'; break;
+            }
+          }
+        }
+
+        if(wcProduct){
+          const priceChanged = parseFloat(newPrice) !== parseFloat(wcProduct.price);
+          fileMatches.push({
+            sku: wcProduct.sku,
+            name: wcProduct.name,
+            old_price: wcProduct.price,
+            new_price: newPrice,
+            match_type: matchType,
+            confidence: matchType==='exact'?1.0:0.8,
+            include: priceChanged,
+            note: ep.note||''
+          });
+        }
+      }
+
+      const sourceName=f.name.replace(/\.[^.]+$/,'').slice(0,30);
+      fileMatches.forEach(m=>m._source=sourceName);
+
+      const inc=fileMatches.filter(m=>m.include&&m.sku);
+      fileLog(idx,`→ ${inc.length} produkter med prisendring`,'ok');
+      fileLog(idx,`→ ${fileMatches.filter(m=>!m.include).length} uten prisendring`,'warn');
+      fileLog(idx,`→ ${extractedProducts.length - fileMatches.length} ikke matchet mot WooCommerce`,'warn');
+      setFileStatus(idx,`${inc.length} endringer`,'done');
+      setBar(`pb_${idx}`,100);
+      return fileMatches;
+    }
+    // Run all file analyses in parallel
+    const results=await Promise.all(S.files.map((item,i)=>analyseFile(item,i)));
+    S.allMatches=results.flat();
+
+    // Deduplicate: if same SKU appears in multiple files, keep the one with lowest price (or last updated)
+    const skuMap=new Map();
+    for(const m of S.allMatches){
+      if(!m.include||!m.sku) continue;
+      if(!skuMap.has(m.sku)) skuMap.set(m.sku,m);
+      else {
+        const existing=skuMap.get(m.sku);
+        if(parseFloat(m.new_price)<parseFloat(existing.new_price)) skuMap.set(m.sku,m);
+      }
     }
 
-    let allMatches = [];
-    let summary = '';
-
-    if(estimatedTokens <= MAX_PRODUCT_TOKENS) {
-      // Single request
-      log(`→ Sender ${S.products.length} produkter i én request...`);
-      setMsg('Claude analyserer prislisten...');
-      const result = await callAI(compressedList, true);
-      allMatches = result.matches || [];
-      summary = result.summary || '';
-    } else {
-      // Split into batches
-      const batches = [];
-      for(let i = 0; i < S.products.length; i += BATCH_SIZE) {
-        batches.push(S.products.slice(i, i + BATCH_SIZE));
-      }
-      log(`→ ${S.products.length} produkter delt i ${batches.length} batches à ~${BATCH_SIZE}`, 'warn');
-
-      for(let i = 0; i < batches.length; i++) {
-        const chunk = batches[i].map(p=>`${p.sku}|${p.name.slice(0,40)}|${p.price}`).join('\n');
-        setMsg(`Analyserer batch ${i+1} av ${batches.length}...`);
-        log(`→ Batch ${i+1}/${batches.length} (${batches[i].length} produkter)...`);
-        const result = await callAI(chunk, i === 0);
-        const batchMatches = (result.matches || []).filter(m=>m.include&&m.sku);
-        allMatches = allMatches.concat(result.matches || []);
-        log(`→ Batch ${i+1}: ${batchMatches.length} matcher`, 'ok');
-        if(result.summary && i === batches.length-1) summary = result.summary;
-      }
-    }
-
-    S.matches = allMatches;
-
-    const matched = S.matches.filter(m=>m.include&&m.sku);
-    const skipped = S.matches.filter(m=>!m.include);
-    log(`→ ${matched.length} matcher funnet totalt`, 'ok');
-    log(`→ ${skipped.length} produkter uten match`, 'warn');
-    if(summary) log(`→ AI: ${summary}`, 'ok');
+    const matched=S.allMatches.filter(m=>m.include&&m.sku);
+    const skipped=S.allMatches.filter(m=>!m.include);
+    document.getElementById('overallStatus').className='banner success';
+    document.getElementById('overallStatus').innerHTML=`<span>✓ Ferdig — ${matched.length} matcher funnet på tvers av ${S.files.length} fil${S.files.length>1?'er':''}.</span>`;
 
     renderMatches();
     buildSummary();
-    document.getElementById('analysisProgress').style.display = 'none';
-    document.getElementById('reviewArea').style.display = 'block';
-    document.getElementById('exportBtn').disabled = false;
+    setStep(3);
 
-  } catch(e) {
-    log(`✗ Feil: ${e.message}`, 'err');
-    setMsg('Analyse feilet — se logg');
+  } catch(e){
+    document.getElementById('overallStatus').className='banner error';
+    document.getElementById('overallStatus').innerHTML=`<span>✗ Feil: ${e.message}</span>`;
+    document.getElementById('cfgDot').className='config-status err';
   }
 }
+function buildExtractPrompt(instructions){
+  return `Du er en prisuttrekkings-ekspert. Les prislisten og trekk ut ALLE produkter med pris.
 
-function buildPrompt(productList, instructions) {
-  return `Du er en prisoppdateringsagent for en WooCommerce-nettbutikk.
-
-Her er alle produkter og varianter med SKU (format: SKU|Navn|NåværendePris):
-${productList}
-
-${instructions ? `Instruksjoner fra bruker:\n${instructions}\n` : ''}
-Les prislisten og returner et JSON-objekt med denne strukturen:
+${instructions?`Instruksjoner:\n${instructions}\n`:''}
+Returner et JSON-objekt:
 {
-  "matches": [
+  "products": [
     {
-      "sku": "EKSAKT-SKU-FRA-LISTEN",
-      "name": "Produktnavn fra butikken",
-      "old_price": "nåværende pris som streng",
-      "new_price": "ny pris kun tall med punktum som desimal f.eks 1299.00",
-      "match_type": "exact",
-      "confidence": 0.95,
-      "include": true,
-      "note": "valgfri kommentar"
+      "sku": "produkt-artikkelnummer fra filen (tom streng hvis ikke oppgitt)",
+      "name": "produktnavn slik det står i filen",
+      "price": "pris som tall med punktum som desimal f.eks 1299.00 — HENT EKSAKT PRIS FRA FILEN, ikke regn ut",
+      "note": "variant/farge/størrelse eller andre detaljer"
     }
-  ],
-  "summary": "Kort oppsummering på norsk: hvor mange priser endret seg, gjennomsnittlig endring osv."
+  ]
 }
 
-Regler:
-- Bruk alltid eksakt SKU fra listen
-- new_price: kun tall, punktum som desimalskilletegn
-- Sett include:false hvis prisen er uendret
-- Ikke inkluder produkter du ikke finner i prislisten
-- Match på produktnavn der SKU ikke finnes direkte i prislisten`;
+VIKTIG: Hent prisen nøyaktig slik den står i filen. Ikke rund av, ikke estimer. Hvis prisen er 19348 i filen skal price være 19348.00.`;
 }
-
 /* ── Render ── */
-let currentFilter = 'all';
-function setFilter(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+function setFilter(f,btn){ currentFilter=f; document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRows(); }
+function setSrcFilter(src){ currentSource=src; document.querySelectorAll('.src-tab').forEach(t=>t.classList.toggle('active',t.dataset.src===src)); renderRows(); }
+
+function renderMatches(){
+  const inc=S.allMatches.filter(m=>m.include&&m.sku);
+  const changed=inc.filter(m=>m.old_price!==m.new_price);
+  const skip=S.allMatches.filter(m=>!m.include);
+  document.getElementById('statMatch').textContent=inc.length;
+  document.getElementById('statChanged').textContent=changed.length;
+  document.getElementById('statSkip').textContent=skip.length;
+
+  // Build source tabs if multiple files
+  const sources=[...new Set(S.allMatches.filter(m=>m._source).map(m=>m._source))];
+  if(sources.length>1){
+    document.getElementById('srcTabsWrap').style.display='block';
+    document.getElementById('srcTabs').innerHTML=
+      `<div class="src-tab active" data-src="all" onclick="setSrcFilter('all')">Alle</div>`+
+      sources.map(s=>`<div class="src-tab" data-src="${s}" onclick="setSrcFilter('${s}')">${s}</div>`).join('');
+  }
   renderRows();
 }
 
-function renderMatches() {
-  const inc = S.matches.filter(m=>m.include&&m.sku);
-  const changed = inc.filter(m=>m.old_price!==m.new_price);
-  const skip = S.matches.filter(m=>!m.include);
-  document.getElementById('statMatch').textContent = inc.length;
-  document.getElementById('statChanged').textContent = changed.length;
-  document.getElementById('statSkip').textContent = skip.length;
-  renderRows();
-}
-
-function renderRows() {
-  const filtered = S.matches.filter(m => {
+function renderRows(){
+  const filtered=S.allMatches.filter(m=>{
+    if(currentSource!=='all' && m._source!==currentSource) return false;
     if(currentFilter==='all') return true;
     if(currentFilter==='match') return m.include&&m.sku;
     if(currentFilter==='changed') return m.include&&m.old_price!==m.new_price;
@@ -801,70 +700,63 @@ function renderRows() {
     if(currentFilter==='down') return m.include&&parseFloat(m.new_price)<parseFloat(m.old_price);
     return true;
   });
-
-  document.getElementById('matchBody').innerHTML = filtered.map(m => {
-    const idx = S.matches.indexOf(m);
-    const op = parseFloat(m.old_price)||0, np = parseFloat(m.new_price)||0, diff = np-op;
-    const pct = op ? ((diff/op)*100).toFixed(1) : '';
-    const diffHtml = op&&np&&diff!==0 ? `<span class="${diff>0?'price-up':'price-down'}">${diff>0?'↑':'↓'}${Math.abs(diff).toFixed(0)}${pct?` (${Math.abs(pct)}%)`:''}` : '';
-    const badge = !m.include?'skip':m.match_type==='exact'?'match':'new';
-    const label = badge==='skip'?'Ikke matchet':badge==='match'?'Match':'Fuzzy';
+  document.getElementById('matchBody').innerHTML=filtered.map(m=>{
+    const idx=S.allMatches.indexOf(m);
+    const op=parseFloat(m.old_price)||0,np=parseFloat(m.new_price)||0,diff=np-op;
+    const pct=op?((diff/op)*100).toFixed(1):'';
+    const diffHtml=op&&np&&diff!==0?`<span class="${diff>0?'price-up':'price-down'}">${diff>0?'↑':'↓'}${Math.abs(diff).toFixed(0)}${pct?` (${Math.abs(pct)}%)`:''}</span>`:'';
+    const badge=!m.include?'skip':m.match_type==='exact'?'match':'new';
+    const label=badge==='skip'?'Ikke matchet':badge==='match'?'Match':'Fuzzy';
     return `<tr>
       <td><span class="badge ${badge}">${label}</span></td>
-      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(m.name||'').replace(/"/g,'&quot;')}">${m.name||'—'}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(m.name||'').replace(/"/g,'&quot;')}">${m.name||'—'}</td>
       <td style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--mid)">${m.sku||'—'}</td>
       <td style="font-family:'Courier Prime',monospace;font-size:12px">${m.old_price?`kr ${m.old_price}`:'—'}</td>
       <td style="font-family:'Courier Prime',monospace;font-size:12px">${m.new_price?`kr ${m.new_price}`:'—'}${diffHtml}</td>
-      <td><input type="checkbox" ${m.include?'checked':''} onchange="S.matches[${idx}].include=this.checked;updateCSV();buildSummary()"></td>
+      <td>${m._source?`<span class="src-pill">${m._source.slice(0,16)}</span>`:''}</td>
+      <td><input type="checkbox" ${m.include?'checked':''} onchange="S.allMatches[${idx}].include=this.checked;buildSummary()"></td>
     </tr>`;
   }).join('');
 }
 
-function buildSummary() {
-  const inc = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
-  const up = inc.filter(r=>parseFloat(r.new_price)>parseFloat(r.old_price));
-  const down = inc.filter(r=>parseFloat(r.new_price)<parseFloat(r.old_price));
-  const unchanged = inc.filter(r=>parseFloat(r.new_price)===parseFloat(r.old_price));
-
+function buildSummary(){
+  const inc=S.allMatches.filter(m=>m.include&&m.sku&&m.new_price);
+  const up=inc.filter(r=>parseFloat(r.new_price)>parseFloat(r.old_price));
+  const down=inc.filter(r=>parseFloat(r.new_price)<parseFloat(r.old_price));
   if(!inc.length) return;
-
-  const avgUp = up.length ? (up.reduce((s,r)=>s+(parseFloat(r.new_price)-parseFloat(r.old_price)),0)/up.length).toFixed(0) : 0;
-  const avgDown = down.length ? (down.reduce((s,r)=>s+(parseFloat(r.old_price)-parseFloat(r.new_price)),0)/down.length).toFixed(0) : 0;
-
-  document.getElementById('summaryCard').style.display = 'block';
-  document.getElementById('summaryContent').innerHTML = `
-    ${up.length ? `<span style="color:var(--red)">↑ ${up.length} produkter får prisøkning</span> (snitt +kr ${avgUp})<br>` : ''}
-    ${down.length ? `<span style="color:var(--green)">↓ ${down.length} produkter får prisreduksjon</span> (snitt -kr ${avgDown})<br>` : ''}
-    ${unchanged.length ? `<span style="color:var(--mid)">${unchanged.length} produkter er uendret</span><br>` : ''}
-    <br><strong>${inc.length} rader</strong> vil bli eksportert til CSV.
-  `;
+  const avgUp=up.length?(up.reduce((s,r)=>s+(parseFloat(r.new_price)-parseFloat(r.old_price)),0)/up.length).toFixed(0):0;
+  const avgDown=down.length?(down.reduce((s,r)=>s+(parseFloat(r.old_price)-parseFloat(r.new_price)),0)/down.length).toFixed(0):0;
+  document.getElementById('summaryCard').style.display='block';
+  document.getElementById('summaryContent').innerHTML=
+    (up.length?`<span style="color:var(--red)">↑ ${up.length} produkter får prisøkning</span> — snitt +kr ${avgUp}<br>`:'') +
+    (down.length?`<span style="color:var(--green)">↓ ${down.length} produkter får prisreduksjon</span> — snitt −kr ${avgDown}<br>`:'') +
+    `<br><strong>${inc.length} rader</strong> eksporteres til CSV.`;
 }
 
-/* ── CSV ── */
-function updateCSV() {
-  const rows = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
-  S.csv = ['SKU,pris', ...rows.map(r=>`${r.sku},${r.new_price}`)].join('\n');
-}
-
-function prepExport() {
-  updateCSV();
-  const rows = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
-  document.getElementById('expCount').textContent = rows.length;
-  document.getElementById('expUp').textContent = rows.filter(r=>parseFloat(r.new_price)>parseFloat(r.old_price)).length;
-  document.getElementById('expDown').textContent = rows.filter(r=>parseFloat(r.new_price)<parseFloat(r.old_price)).length;
-  const lines = ['SKU,pris', ...rows.slice(0,8).map(r=>`${r.sku},${r.new_price}`)];
-  document.getElementById('csvPreview').textContent = lines.join('\n') + (rows.length>8?'\n…':'');
+/* ── Export ── */
+function prepExport(){
+  const rows=S.allMatches.filter(m=>m.include&&m.sku&&m.new_price);
+  // Deduplicate SKUs — keep lowest price if conflict
+  const seen=new Map();
+  for(const r of rows){
+    if(!seen.has(r.sku)||parseFloat(r.new_price)<parseFloat(seen.get(r.sku).new_price)) seen.set(r.sku,r);
+  }
+  const deduped=[...seen.values()];
+  S.csv=['SKU,pris',...deduped.map(r=>`${r.sku},${r.new_price}`)].join('\n');
+  document.getElementById('expCount').textContent=deduped.length;
+  document.getElementById('expUp').textContent=deduped.filter(r=>parseFloat(r.new_price)>parseFloat(r.old_price)).length;
+  document.getElementById('expDown').textContent=deduped.filter(r=>parseFloat(r.new_price)<parseFloat(r.old_price)).length;
+  const lines=['SKU,pris',...deduped.slice(0,8).map(r=>`${r.sku},${r.new_price}`)];
+  document.getElementById('csvPreview').textContent=lines.join('\n')+(deduped.length>8?'\n…':'');
   setStep(4);
 }
 
-function downloadCSV() {
-  if(!S.csv) { updateCSV(); }
-  const rows = S.matches.filter(m=>m.include&&m.sku&&m.new_price);
-  const csv = ['SKU,pris', ...rows.map(r=>`${r.sku},${r.new_price}`)].join('\n');
-  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `novooi-prisoppdatering_${new Date().toISOString().slice(0,10)}.csv`;
+function downloadCSV(){
+  if(!S.csv) return;
+  const blob=new Blob([S.csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`novooi-prisoppdatering_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
 }
 </script>
